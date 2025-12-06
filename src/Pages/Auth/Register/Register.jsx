@@ -28,6 +28,7 @@ const Register = () => {
 
   const watchChangingDistrict = useWatch({ name: "district", control });
 
+  // function that return all upazilas districts wise 
   const upazilasByDistrict = (data) => {
     const districtData = districts.find((d) => d.name === data);
 
@@ -113,7 +114,7 @@ const Register = () => {
   return (
     <Container>
       <div className="flex items-center justify-center my-12 md:my-16 p-3.5">
-        <div className="w-full  p-8 space-y-6 bg-white rounded-lg shadow">
+        <div className="w-full  p-8 space-y-6 bg-white rounded-lg shadow-xl shadow-top">
           <h2 className="text-2xl font-bold text-center text-gray-800">
             Register your account
           </h2>

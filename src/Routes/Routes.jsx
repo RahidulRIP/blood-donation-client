@@ -40,11 +40,22 @@ const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <DashboardLayout />,
+    HydrateFallback: Loader,
     children: [
       {
         path: "profile",
         index: true,
         Component: MyProfile,
+        loader: async () => {
+          const [districtsRes, upazilasRes] = await Promise.all([
+            fetch("../../public/districts.json"),
+            fetch("../../public/upazilas.json"),
+          ]);
+          const districts = await districtsRes.json();
+          const upazilas = await upazilasRes.json();
+
+          return { districts, upazilas };
+        },
       },
     ],
   },

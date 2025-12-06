@@ -3,7 +3,6 @@ import { FiHome, FiSettings } from "react-icons/fi";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { Link, NavLink, Outlet } from "react-router";
 
-
 const DashboardLayout = () => {
   return (
     <div>
@@ -65,7 +64,7 @@ const DashboardLayout = () => {
               {/* List item 3*/}
               <li>
                 <NavLink
-                  to={'/dashboard/profile'}
+                  to={"/dashboard/profile"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="My-Profile"
                 >
@@ -74,8 +73,6 @@ const DashboardLayout = () => {
                   <span className="is-drawer-close:hidden">My Profile</span>
                 </NavLink>
               </li>
-
-             
             </ul>
           </div>
         </div>

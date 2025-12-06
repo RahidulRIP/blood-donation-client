@@ -97,7 +97,7 @@ const Login = () => {
             {error && <h2 className="text-red-600">{error}</h2>}
             <button
               type="submit"
-              className="btn btn-block bg-black text-white hover:bg-gray-800"
+              className="btn_primary"
             >
               Login
             </button>

@@ -1,8 +1,26 @@
+import { useQuery } from "@tanstack/react-query";
 import Container from "../../../Components/Container/Container";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Form from "../../../Components/Dashboard/Form";
+import { useLoaderData } from "react-router";
 
 const MyProfile = () => {
+  const { districts, upazilas } = useLoaderData();
+
+  const axiosSecure = useAxiosSecure();
+
   const { user } = useAuth();
+
+  const { data: userData = {}, refetch } = useQuery({
+    queryKey: ["userData", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users?email=${user?.email}`);
+      return res?.data[0];
+    },
+    enabled: !!user?.email,
+  });
+  // console.log(userData);
   return (
     <div>
       <Container>
@@ -19,12 +37,18 @@ const MyProfile = () => {
             <div className="">
               <div className="text-center">
                 <h2 className="text-lg ">
-                  <span className="font-medium">Name</span> {user?.displayName}
+                  <span className="font-medium">Name:</span> {userData?.name}
                 </h2>
                 <h2 className="text-lg">
                   <span className="font-medium">Email:</span> {user?.email}
                 </h2>
               </div>
+              <Form
+                districts={districts}
+                upazilas={upazilas}
+                userData={userData}
+                refetch={refetch}
+              />
             </div>
           </div>
         )}
