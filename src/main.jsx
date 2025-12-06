@@ -9,7 +9,7 @@ import AuthProvider from "./Contexts/AuthProvider/AuthProvider.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <ToastContainer position="top-center" autoClose={2000} theme="light" />
+      <ToastContainer position="top-right" autoClose={2000} theme="light" />
       <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>

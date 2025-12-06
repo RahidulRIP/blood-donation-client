@@ -4,8 +4,6 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FiLock, FiMail } from "react-icons/fi";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
-import SocialGoogleLogin from "../SocialLogin/SocailGoogleLogin";
-
 
 const Login = () => {
   const [eyes, setEyes] = useState(false);
@@ -104,10 +102,7 @@ const Login = () => {
               Login
             </button>
           </form>
-          {/* google sign in */}
-          <div>
-            <SocialGoogleLogin linkTOGo={location?.state} />
-          </div>
+
           <h2>
             Have an account? Please{" "}
             <Link

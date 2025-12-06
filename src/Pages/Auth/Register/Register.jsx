@@ -3,29 +3,58 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FiImage, FiLock, FiMail, FiUser } from "react-icons/fi";
-import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
-import SocialGoogleLogin from "../SocialLogin/SocailGoogleLogin";
+import { useForm, useWatch } from "react-hook-form";
+import { Link, useLoaderData, useLocation, useNavigate } from "react-router";
 import Container from "../../../Components/Container/Container";
+import { toast } from "react-toastify";
+import Loader from "../../../Components/Shared/Loader";
 
 const Register = () => {
   const { createUser, updateUserProfile } = useAuth();
+
   const [eyes, setEyes] = useState(false);
   const [error, setError] = useState("");
+
   const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm();
+
+  const { districts, upazilas } = useLoaderData();
+  const districtsOnly = districts.map((data) => data.name);
+
+  const watchChangingDistrict = useWatch({ name: "district", control });
+
+  const upazilasByDistrict = (data) => {
+    const districtData = districts.find((d) => d.name === data);
+
+    const selected_District_Id = districtData?.id;
+    const districtWiseUpazilasData = upazilas.filter(
+      (u) => u.district_id === selected_District_Id
+    );
+    const upazilasName = districtWiseUpazilasData.map((data) => data.name);
+    return upazilasName;
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(location);
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   const handleRegister = async (data) => {
     // register a user
+    if (!data) {
+      return <Loader />;
+    }
+
+    if (data?.password !== data?.confirm_password) {
+      toast.error("Must be Same Password");
+      return;
+    }
+
     createUser(data?.email, data?.password)
       .then(() => {
         // console.log(result.user);
@@ -39,16 +68,33 @@ const Register = () => {
         try {
           axiosSecure.post(url, formData).then((res) => {
             const imgURL = res?.data?.data?.display_url;
-
             const profile = {
               displayName: data?.name,
               photoURL: imgURL,
             };
-            console.log(profile);
+
             // update user profile
             updateUserProfile(profile)
               .then(() => {
                 // console.log(result);
+
+                // user post request start
+                const userInfo = {
+                  name: data?.name,
+                  email: data?.email,
+                  photoURL: imgURL,
+                  blood_group: data?.blood_group,
+                  district: data?.district,
+                  upazila: data?.upazila,
+                  role: data?.role,
+                };
+
+                axiosSecure.post("/users", userInfo).then((res) => {
+                  if (res?.data?.insertedId) {
+                    toast.success("User registered successfully!");
+                  }
+                });
+                // user post request end
                 navigate(location?.state || "/");
               })
               .catch((err) => {
@@ -144,7 +190,7 @@ const Register = () => {
                   </label>
                   <select
                     defaultValue="Select blood group"
-                    {...register("blood_groups", {
+                    {...register("blood_group", {
                       required: "Select your blood group",
                     })}
                     className="select select-bordered w-full focus:outline-none focus:ring-2 focus:ring-accent"
@@ -157,7 +203,7 @@ const Register = () => {
                       </option>
                     ))}
                   </select>
-                  {errors.blood_groups && (
+                  {errors.blood_group && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.blood_group.message}
                     </p>
@@ -178,9 +224,12 @@ const Register = () => {
                     className="select select-bordered w-full focus:outline-none focus:ring-2 focus:ring-accent"
                   >
                     <option disabled>Select district</option>
-                    <option value="Dhaka">Dhaka</option>
-                    <option value="Chattogram">Chattogram</option>
-                    <option value="Khulna">Khulna</option>
+
+                    {districtsOnly.map((d, i) => (
+                      <option key={i} value={d}>
+                        {d}
+                      </option>
+                    ))}
                   </select>
                   {errors.district && (
                     <p className="text-red-500 text-sm mt-1">
@@ -201,9 +250,12 @@ const Register = () => {
                     className="select select-bordered w-full focus:outline-none focus:ring-2 focus:ring-accent"
                   >
                     <option disabled>Select upazila</option>
-                    <option value="Savar">Savar</option>
-                    <option value="Dhanmondi">Dhanmondi</option>
-                    <option value="Khulna Sadar">Khulna Sadar</option>
+
+                    {upazilasByDistrict(watchChangingDistrict).map((u, i) => (
+                      <option key={i} value={u}>
+                        {u}
+                      </option>
+                    ))}
                   </select>
                   {errors.upazila && (
                     <p className="text-red-500 text-sm mt-1">
@@ -278,23 +330,28 @@ const Register = () => {
             {/* checkBox  */}
             <div className="flex items-center gap-2">
               <input
-                name="terms"
                 type="checkbox"
                 className="checkbox checkbox-sm"
+                {...register("terms", {
+                  required: "You must accept terms & conditions",
+                })}
               />
               <h2 className="text-sm text-gray-700">
                 Accept Terms & Conditions
               </h2>
             </div>
+            {errors.terms && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.terms.message}
+              </p>
+            )}
+
             {/* error  */}
             {error && <h2 className="text-red-600">{error}</h2>}
             <button type="submit" className="btn_primary">
               Register
             </button>
           </form>
-          <div>
-            <SocialGoogleLogin />
-          </div>
 
           <h2>
             Have an account? Please
