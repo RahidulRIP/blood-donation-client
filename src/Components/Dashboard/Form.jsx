@@ -55,6 +55,10 @@ const Form = ({ userData, districts, upazilas, refetch }) => {
       console.log(error);
     }
   };
+
+  const handleEditProfile = () => {
+    setEditProfile(!editProfile);
+  };
   return (
     <div>
       <div className="bg-gray-50 flex items-center justify-center p-4 sm:p-10 gap-6  border-b ">
@@ -67,8 +71,8 @@ const Form = ({ userData, districts, upazilas, refetch }) => {
         <div className="flex justify-between items-center  gap-6">
           {editProfile ? (
             <button
-              onClick={() => setEditProfile(!editProfile)}
-              className="flex items-center gap-2 px-6 py-2 rounded-full bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 shadow-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+              onClick={handleEditProfile}
+              className={`flex items-center gap-2 px-6 py-2 rounded-full bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 shadow-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300`}
             >
               <FaEdit className="text-lg" />
               Edit Profile

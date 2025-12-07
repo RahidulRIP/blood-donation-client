@@ -1,6 +1,7 @@
-import { FaBox } from "react-icons/fa";
+import { FaBox, FaHome } from "react-icons/fa";
 import { FiHome, FiSettings } from "react-icons/fi";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
+import { FaHandHoldingMedical } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router";
 
 const DashboardLayout = () => {
@@ -71,6 +72,33 @@ const DashboardLayout = () => {
                   {/*icon */}
                   <FaBox size={17} />
                   <span className="is-drawer-close:hidden">My Profile</span>
+                </NavLink>
+              </li>
+
+              {/* List item 4*/}
+              <li>
+                <NavLink
+                  to={"/dashboard"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Donar-Information"
+                >
+                  {/*icon */}
+                  <FaHome size={20} />
+                  <span className="is-drawer-close:hidden">Donar Home</span>
+                </NavLink>
+              </li>
+              {/* List item 5*/}
+              <li>
+                <NavLink
+                  to={"/dashboard/create-donation-request"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Create Donation Request"
+                >
+                  {/*icon */}
+                  <FaHandHoldingMedical size={20}/>
+                  <span className="is-drawer-close:hidden">
+                    Create Donation Request
+                  </span>
                 </NavLink>
               </li>
             </ul>

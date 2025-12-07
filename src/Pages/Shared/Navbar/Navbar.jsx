@@ -121,7 +121,7 @@ const Navbar = () => {
                       <h3 className=" text-base font-medium">{user?.email}</h3>
                       <h3>
                         <Link
-                          to={"/dashboard/profile"}
+                          to={"/dashboard"}
                           className="btn btn-dash w-full"
                         >
                           DashBoard
