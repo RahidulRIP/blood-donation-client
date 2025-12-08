@@ -18,7 +18,7 @@ const DashboardLayout = () => {
     },
     enabled: !!user?.email,
   });
-  console.log(userData?.role);
+
   return (
     <div>
       <div className="drawer lg:drawer-open">
@@ -84,7 +84,7 @@ const DashboardLayout = () => {
                     <NavLink
                       to={"/dashboard"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Donar-Information"
+                      data-tip="Donor-Home-Information"
                     >
                       {/*icon */}
                       <FaHome size={20} />
@@ -95,7 +95,7 @@ const DashboardLayout = () => {
                     <NavLink
                       to={"/dashboard/create-donation-request"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Create Donation Request"
+                      data-tip="Donor Create Donation Request"
                     >
                       {/*icon */}
                       <FaHandHoldingMedical size={20} />
@@ -115,7 +115,7 @@ const DashboardLayout = () => {
                   <NavLink
                     to={"/dashboard"}
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Donar-Information"
+                    data-tip="Admin-Home-Information"
                   >
                     <FaHome size={20} />
                     <span className="is-drawer-close:hidden">Admin Home</span>
