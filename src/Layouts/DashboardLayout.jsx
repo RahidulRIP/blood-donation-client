@@ -3,8 +3,22 @@ import { FiHome, FiSettings } from "react-icons/fi";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { FaHandHoldingMedical } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router";
+import useAuth from "../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const DashboardLayout = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const { data: userData = {} } = useQuery({
+    queryKey: ["userData", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users?email=${user?.email}`);
+      return res?.data[0];
+    },
+    enabled: !!user?.email,
+  });
+  console.log(userData?.role);
   return (
     <div>
       <div className="drawer lg:drawer-open">
@@ -37,7 +51,7 @@ const DashboardLayout = () => {
           <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
-              {/* List item 1*/}
+              {/*HOME*/}
               <li>
                 <Link
                   to={"/"}
@@ -50,19 +64,7 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
-              {/* List item 2*/}
-              <li>
-                <button
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="Settings"
-                >
-                  {/* Settings icon */}
-                  <FiSettings size={18} />
-                  <span className="is-drawer-close:hidden">Settings</span>
-                </button>
-              </li>
-
-              {/* List item 3*/}
+              {/* Profile*/}
               <li>
                 <NavLink
                   to={"/dashboard/profile"}
@@ -75,32 +77,52 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
 
-              {/* List item 4*/}
-              <li>
-                <NavLink
-                  to={"/dashboard"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="Donar-Information"
-                >
-                  {/*icon */}
-                  <FaHome size={20} />
-                  <span className="is-drawer-close:hidden">Donar Home</span>
-                </NavLink>
-              </li>
-              {/* List item 5*/}
-              <li>
-                <NavLink
-                  to={"/dashboard/create-donation-request"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="Create Donation Request"
-                >
-                  {/*icon */}
-                  <FaHandHoldingMedical size={20}/>
-                  <span className="is-drawer-close:hidden">
-                    Create Donation Request
-                  </span>
-                </NavLink>
-              </li>
+              {/* Donar Dashboard Link start  */}
+              {userData?.role === "donor" && (
+                <>
+                  <li>
+                    <NavLink
+                      to={"/dashboard"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Donar-Information"
+                    >
+                      {/*icon */}
+                      <FaHome size={20} />
+                      <span className="is-drawer-close:hidden">Donar Home</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"/dashboard/create-donation-request"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Create Donation Request"
+                    >
+                      {/*icon */}
+                      <FaHandHoldingMedical size={20} />
+                      <span className="is-drawer-close:hidden">
+                        Create Donation Request
+                      </span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {/* Donar Dashboard Link end  */}
+
+              {/* Admin Dashboard Link start  */}
+              {userData?.role === "admin" && (
+                <li>
+                  <NavLink
+                    to={"/dashboard"}
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Donar-Information"
+                  >
+                    <FaHome size={20} />
+                    <span className="is-drawer-close:hidden">Admin Home</span>
+                  </NavLink>
+                </li>
+              )}
+              {/* Admin Dashboard Link end  */}
             </ul>
           </div>
         </div>

@@ -7,11 +7,13 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import MyProfile from "../Pages/Dashboard/MyProfile/MyProfile";
 import Loader from "../Components/Shared/Loader";
 import PrivateRoute from "./PrivateRoute";
-import DonarHome from "../Pages/Dashboard/DonarDashboard/DonarHome";
-import CreateDonationRequest from "../Pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
-import UpdateDonarReqData from "../Pages/Dashboard/UpdateDonarReqData/UpdateDonarReqData";
-import MyDonationRequests from "../Pages/Dashboard/MyDonationRequests/MyDonationRequests";
-import DetailsDonarReqData from "../Pages/Dashboard/MyDonationRequests/DetailsDonarReqData/DetailsDonarReqData";
+import DonarHome from "../Pages/Dashboard/DonarDashboard/DonarHome/DonarHome";
+import CreateDonationRequest from "../Pages/Dashboard/DonarDashboard/Pages/CreateDonationRequest/CreateDonationRequest";
+import UpdateDonarReqData from "../Pages/Dashboard/DonarDashboard/Pages/UpdateDonarReqData/UpdateDonarReqData";
+import MyDonationRequests from "../Pages/Dashboard/DonarDashboard/Pages/MyDonationRequests/MyDonationRequests";
+import DetailsDonarReqData from "../Pages/Dashboard/DonarDashboard/Pages/DetailsDonarReqData/DetailsDonarReqData";
+import AdminHome from "../Pages/Dashboard/AdminDashboard/AdminHome/AdminHome";
+import DashboardRoleBasedPage from "../Components/Dashboard/DashboardRoleBasedPage";
 
 const router = createBrowserRouter([
   {
@@ -52,9 +54,10 @@ const router = createBrowserRouter([
     ),
     HydrateFallback: Loader,
     children: [
+      // donar dashboard start
       {
         index: true,
-        Component: DonarHome,
+        Component: () => <DashboardRoleBasedPage />,
       },
       {
         path: "my-donation-requests",
@@ -92,8 +95,6 @@ const router = createBrowserRouter([
       {
         path: "updateDonarReqData/:id",
         Component: UpdateDonarReqData,
-        // loader: ({ params }) =>
-        //   fetch(`http://localhost:9000/create-donation-request/${params?.id}`),
         loader: async () => {
           const [districtsRes, upazilasRes] = await Promise.all([
             fetch("/districts.json"),
@@ -109,6 +110,14 @@ const router = createBrowserRouter([
         path: "detailsDonarReqData/:id",
         Component: DetailsDonarReqData,
       },
+      // donar dashboard end
+
+      // admin dashboard start
+      {
+        index: true,
+        Component: AdminHome,
+      },
+      // admin dashboard end
     ],
   },
 ]);

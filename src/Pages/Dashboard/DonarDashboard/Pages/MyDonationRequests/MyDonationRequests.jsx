@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
+import useAuth from "../../../../../hooks/useAuth";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
@@ -31,8 +31,7 @@ const MyDonationRequests = () => {
   });
 
   const [filteredData, setFilteredData] = useState([]);
-
-  console.log(donationReqData);
+ 
 
   useEffect(() => {
     setFilteredData(donationReqData);
@@ -73,12 +72,9 @@ const MyDonationRequests = () => {
           axiosSecure.delete(`/create-donation-request/${id}`).then((res) => {
             if (res?.data?.deletedCount) {
               refetch();
-
               Swal.fire({
                 title: "Deleted!",
-
                 text: "Your file has been deleted.",
-
                 icon: "success",
               });
             }
@@ -120,7 +116,6 @@ const MyDonationRequests = () => {
         </div>
         {/* Header Section end*/}
 
-        
         {/* <div>
           <h2>Sort By Status</h2>
           <select
