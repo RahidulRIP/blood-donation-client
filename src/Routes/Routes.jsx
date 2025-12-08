@@ -9,6 +9,9 @@ import Loader from "../Components/Shared/Loader";
 import PrivateRoute from "./PrivateRoute";
 import DonarHome from "../Pages/Dashboard/DonarDashboard/DonarHome";
 import CreateDonationRequest from "../Pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
+import UpdateDonarReqData from "../Pages/Dashboard/UpdateDonarReqData/UpdateDonarReqData";
+import MyDonationRequests from "../Pages/Dashboard/MyDonationRequests/MyDonationRequests";
+import DetailsDonarReqData from "../Pages/Dashboard/MyDonationRequests/DetailsDonarReqData/DetailsDonarReqData";
 
 const router = createBrowserRouter([
   {
@@ -25,8 +28,8 @@ const router = createBrowserRouter([
         Component: Register,
         loader: async () => {
           const [districtsRes, upazilasRes] = await Promise.all([
-            fetch("../../public/districts.json"),
-            fetch("../../public/upazilas.json"),
+            fetch("/districts.json"),
+            fetch("/upazilas.json"),
           ]);
           const districts = await districtsRes.json();
           const upazilas = await upazilasRes.json();
@@ -53,15 +56,18 @@ const router = createBrowserRouter([
         index: true,
         Component: DonarHome,
       },
-
+      {
+        path: "my-donation-requests",
+        Component: MyDonationRequests,
+      },
       {
         path: "profile",
         index: true,
         Component: MyProfile,
         loader: async () => {
           const [districtsRes, upazilasRes] = await Promise.all([
-            fetch("../../public/districts.json"),
-            fetch("../../public/upazilas.json"),
+            fetch("/districts.json"),
+            fetch("/upazilas.json"),
           ]);
           const districts = await districtsRes.json();
           const upazilas = await upazilasRes.json();
@@ -74,14 +80,34 @@ const router = createBrowserRouter([
         Component: CreateDonationRequest,
         loader: async () => {
           const [districtsRes, upazilasRes] = await Promise.all([
-            fetch("../../public/districts.json"),
-            fetch("../../public/upazilas.json"),
+            fetch("/districts.json"),
+            fetch("/upazilas.json"),
           ]);
           const districts = await districtsRes.json();
           const upazilas = await upazilasRes.json();
 
           return { districts, upazilas };
         },
+      },
+      {
+        path: "updateDonarReqData/:id",
+        Component: UpdateDonarReqData,
+        // loader: ({ params }) =>
+        //   fetch(`http://localhost:9000/create-donation-request/${params?.id}`),
+        loader: async () => {
+          const [districtsRes, upazilasRes] = await Promise.all([
+            fetch("/districts.json"),
+            fetch("/upazilas.json"),
+          ]);
+          const districts = await districtsRes.json();
+          const upazilas = await upazilasRes.json();
+
+          return { districts, upazilas };
+        },
+      },
+      {
+        path: "detailsDonarReqData/:id",
+        Component: DetailsDonarReqData,
       },
     ],
   },
