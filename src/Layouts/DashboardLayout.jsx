@@ -1,11 +1,13 @@
 import { FaBox, FaHome } from "react-icons/fa";
-import { FiHome, FiSettings } from "react-icons/fi";
+import { GiBlood } from "react-icons/gi";
+import { FiHome } from "react-icons/fi";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { FaHandHoldingMedical } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { FaUsers } from "react-icons/fa6";
 
 const DashboardLayout = () => {
   const { user } = useAuth();
@@ -111,16 +113,40 @@ const DashboardLayout = () => {
 
               {/* Admin Dashboard Link start  */}
               {userData?.role === "admin" && (
-                <li>
-                  <NavLink
-                    to={"/dashboard"}
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Admin-Home-Information"
-                  >
-                    <FaHome size={20} />
-                    <span className="is-drawer-close:hidden">Admin Home</span>
-                  </NavLink>
-                </li>
+                <>
+                  <li>
+                    <NavLink
+                      to={"/dashboard"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Admin-Home-Information"
+                    >
+                      <FaHome size={20} />
+                      <span className="is-drawer-close:hidden">Admin Home</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"/dashboard/allUsers"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="All Users"
+                    >
+                      <FaUsers size={20} />
+                      <span className="is-drawer-close:hidden">All Users</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"/dashboard/allBloodDonationRequest"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="All BloodDonation Request"
+                    >
+                      <GiBlood size={20} className="text-red-500"/>
+                      <span className="is-drawer-close:hidden">
+                        All BloodDonation Request
+                      </span>
+                    </NavLink>
+                  </li>
+                </>
               )}
               {/* Admin Dashboard Link end  */}
             </ul>

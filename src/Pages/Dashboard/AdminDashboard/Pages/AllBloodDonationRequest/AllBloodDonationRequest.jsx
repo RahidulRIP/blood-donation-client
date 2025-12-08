@@ -1,21 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import useAuth from "../../../../../hooks/useAuth";
-import { Link } from "react-router";
-import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
+import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import {
-  FaCheck,
   FaEdit,
-  FaEye,
-  FaFilter,
   FaMapMarkerAlt,
   FaTimes,
   FaTint,
   FaTrashAlt,
 } from "react-icons/fa";
+import { FaCheck, FaEye, FaFilter } from "react-icons/fa6";
+import { Link } from "react-router";
+import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
-const MyDonationRequests = () => {
+const AllBloodDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
 
   const { user } = useAuth();
@@ -23,15 +21,13 @@ const MyDonationRequests = () => {
   const { data: donationReqData = [], refetch } = useQuery({
     queryKey: ["donationReqData", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `/create-donation-request/all-data?email=${user?.email}`
-      );
+      const res = await axiosSecure.get(`/create-donation-request/all-data`);
       return res?.data;
     },
   });
 
+  //   fitter functionalities start
   const [filteredData, setFilteredData] = useState([]);
-
   useEffect(() => {
     setFilteredData(donationReqData);
   }, [donationReqData]);
@@ -42,11 +38,12 @@ const MyDonationRequests = () => {
     );
     setFilteredData(filteredByStatus);
   };
+  //   fitter functionalities end
 
   //   ............................................
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(donationReqData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(
@@ -56,6 +53,7 @@ const MyDonationRequests = () => {
 
   //   ............................................
 
+  //   delete
   const handleDeleteDonarReq = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -84,13 +82,12 @@ const MyDonationRequests = () => {
       }
     });
   };
-
   return (
     <div>
-      <div className="md:flex items-center justify-between mx-6 mb-6">
-        {/* Header Section start*/}
+      {/*  */}
+      <div className="md:flex items-center justify-between gap-5 md:mx-6 mb-6">
         <div className="mb-8 md:flex flex-col md:flex-row justify-between items-center gap-10 bg-white p-6 rounded-xl shadow-sm border-l-8 border-red-500">
-          <div>
+          <div className="">
             <h2 className="text-2xl md:text-3xl text-gray-800">
               Welcome,{" "}
               <span className="font-bold text-red-600">
@@ -99,7 +96,8 @@ const MyDonationRequests = () => {
               !
             </h2>
             <p className="text-gray-500 mt-1 flex items-center gap-2">
-              <FaTint className="text-red-500" /> Every drop you give matters.
+              <FaTint className="text-red-500" />
+              Requests Management Panel
             </p>
           </div>
           <div className="mt-4 md:mt-0">
@@ -113,8 +111,6 @@ const MyDonationRequests = () => {
             </div>
           </div>
         </div>
-        {/* Header Section end*/}
-
         {/* sort status  start*/}
         <div className="form-control w-full max-w-xs">
           <h2 className="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
@@ -144,7 +140,6 @@ const MyDonationRequests = () => {
         {/* sort status  end*/}
       </div>
 
-      {/* tabile  */}
       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
         <div className=" overflow-x-auto">
           <table className="table w-full">
@@ -253,7 +248,7 @@ const MyDonationRequests = () => {
                         </Link>
                       </div>
 
-                      {/*conditional Actions */}
+                      {/* In Progress Specific Actions */}
                       {data?.donation_status === "inprogress" && (
                         <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
                           <div className="tooltip" data-tip="Mark Done">
@@ -276,43 +271,41 @@ const MyDonationRequests = () => {
           </table>
         </div>
       </div>
-      <div>
-        {/* ..................... */}
-        <div className="flex justify-center mt-5">
-          <div className="join">
-            <button
-              className="join-item btn"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              Prev
-            </button>
+      {/* ..................... */}
+      <div className="flex justify-center mt-5 ">
+        <div className="join">
+          <button
+            className="join-item btn"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Prev
+          </button>
 
-            {[...Array(totalPages).keys()].map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page + 1)}
-                className={`join-item btn ${
-                  currentPage === page + 1 ? "btn-active" : ""
-                }`}
-              >
-                {page + 1}
-              </button>
-            ))}
-
+          {[...Array(totalPages).keys()].map((page) => (
             <button
-              className="join-item btn"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage(currentPage + 1)}
+              key={page}
+              onClick={() => setCurrentPage(page + 1)}
+              className={`join-item btn ${
+                currentPage === page + 1 ? "btn-active" : ""
+              }`}
             >
-              Next
+              {page + 1}
             </button>
-          </div>
+          ))}
+
+          <button
+            className="join-item btn"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
         </div>
-        {/* .................... */}
       </div>
+      {/* .................... */}
     </div>
   );
 };
 
-export default MyDonationRequests;
+export default AllBloodDonationRequest;

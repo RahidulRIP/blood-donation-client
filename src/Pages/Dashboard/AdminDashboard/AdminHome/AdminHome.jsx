@@ -2,16 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import Container from "../../../../Components/Container/Container";
 import useAuth from "../../../../hooks/useAuth";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
-import { FaUsersLine } from "react-icons/fa6";
-import { FcDonate } from "react-icons/fc";
-import { BiDonateBlood } from "react-icons/bi";
+import { FaUsers, FaHandHoldingUsd, FaFileAlt } from "react-icons/fa"; // Using FaUsers, FaHandHoldingUsd, FaFileAlt for relevance
+import { BiSolidDonateBlood } from "react-icons/bi"; // Using BiSolidDonateBlood
 
 const AdminHome = () => {
   const axiosSecure = useAxiosSecure();
-
   const { user } = useAuth();
 
-  //   total users
+  const totalFunding = 70.0;
+
+  // total users
   const { data: usersData = [] } = useQuery({
     queryKey: ["usersData"],
     queryFn: async () => {
@@ -21,7 +21,7 @@ const AdminHome = () => {
     enabled: !!user?.email,
   });
 
-  //   fetching total blood donation request by donor
+  // fetching total blood donation request by donor
   const { data: totalDonationReqData = [] } = useQuery({
     queryKey: ["totalDonationReqData"],
     queryFn: async () => {
@@ -30,47 +30,80 @@ const AdminHome = () => {
     },
   });
 
-  console.log(usersData?.length);
-  console.log(totalDonationReqData?.length);
-
   return (
     <Container>
-      <div>
-        <h2>BloodLink – Modern Blood Donation System</h2>
-        <div className="stats shadow">
-          <div className="stat">
-            <div className="stat-figure text-primary">
-              <FaUsersLine size={60} />
-            </div>
-            <div className="stat-title">Total Users</div>
-            <div className="stat-value text-primary">{usersData?.length}</div>
+      <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+        <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-10 border-l-8 border-red-600 flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 flex items-center gap-3">
+              <BiSolidDonateBlood className="text-red-600" />
+              BloodLink – Admin Dashboard
+            </h2>
+            <p className="text-lg text-gray-500 mt-2">
+              Welcome, <span className="font-bold">{user?.displayName || "Admin"}</span>! Here's a snapshot of your
+              system's performance.
+            </p>
           </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
-              <FcDonate size={60} />
-            </div>
-            <div className="stat-title">Total Funding</div>
-            <div className="stat-value text-secondary">$70</div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
-              <BiDonateBlood size={60} />
-            </div>
-            <div className="stat-title">Total Blood Donation Request</div>
-            <div className="stat-value text-secondary">
-              {totalDonationReqData?.length}
-            </div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
-              <div className="avatar avatar-online">
-                <div className="w-16 rounded-full">
-                  <img src={user?.photoURL} />
+          <div className="stats shadow mt-8 bg-gray-300">
+            <div className="stat">
+              <div className="stat-figure text-secondary">
+                <div className="avatar avatar-online">
+                  <div className="w-16 rounded-full">
+                    <img src={user?.photoURL} alt="User Avatar" />
+                  </div>
                 </div>
               </div>
+              <div className="stat-title">Admin</div>
+              <div className="stat-value">
+                {user?.displayName?.split(" ")[0] || "Admin"}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Total Users */}
+          <div className="card bg-white shadow-xl hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-t-4 border-blue-500">
+            <div className="card-body p-6 items-center text-center">
+              <div className="text-blue-500 mb-3 bg-blue-100 p-4 rounded-full">
+                <FaUsers size={36} />
+              </div>
+              <h3 className="card-title text-2xl font-bold text-gray-800">
+                {usersData?.length || 0}
+              </h3>
+              <p className="text-gray-500 text-sm uppercase tracking-wide">
+                Total Users
+              </p>
+            </div>
+          </div>
+
+          {/* Funding Card */}
+          <div className="card bg-white shadow-xl hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-t-4 border-green-500">
+            <div className="card-body p-6 items-center text-center">
+              <div className="text-green-500 mb-3 bg-green-100 p-4 rounded-full">
+                <FaHandHoldingUsd size={36} />
+              </div>
+              <h3 className="card-title text-2xl font-bold text-gray-800">
+                ${totalFunding.toFixed(2)}
+              </h3>
+              <p className="text-gray-500 text-sm uppercase tracking-wide">
+                Total Funds Raised
+              </p>
+            </div>
+          </div>
+
+          {/*Total Blood Donation Requests  */}
+          <div className="card bg-white shadow-xl hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-t-4 border-red-600">
+            <div className="card-body p-6 items-center text-center">
+              <div className="text-red-600 mb-3 bg-red-100 p-4 rounded-full">
+                <FaFileAlt size={36} />
+              </div>
+              <h3 className="card-title text-2xl font-bold text-gray-800">
+                {totalDonationReqData?.length || 0}
+              </h3>
+              <p className="text-gray-500 text-sm uppercase tracking-wide">
+                Total Donation Requests
+              </p>
             </div>
           </div>
         </div>

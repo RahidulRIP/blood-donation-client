@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import { useForm, useWatch } from "react-hook-form";
-import { Link, useLoaderData, useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { FiMail, FiUser } from "react-icons/fi";
 import { FaCalendarAlt, FaMapMarkerAlt, FaRegFileAlt } from "react-icons/fa";
 import Container from "../../../../../Components/Container/Container";

@@ -13,6 +13,8 @@ import MyDonationRequests from "../Pages/Dashboard/DonarDashboard/Pages/MyDonati
 import DetailsDonarReqData from "../Pages/Dashboard/DonarDashboard/Pages/DetailsDonarReqData/DetailsDonarReqData";
 import AdminHome from "../Pages/Dashboard/AdminDashboard/AdminHome/AdminHome";
 import DashboardRoleBasedPage from "../Components/Dashboard/DashboardRoleBasedPage";
+import AllUsers from "../Pages/Dashboard/AdminDashboard/Pages/AllUsers/AllUsers";
+import AllBloodDonationRequest from "../Pages/Dashboard/AdminDashboard/Pages/AllBloodDonationRequest/AllBloodDonationRequest";
 
 const router = createBrowserRouter([
   {
@@ -115,6 +117,14 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: AdminHome,
+      },
+      {
+        path: "allUsers",
+        Component: AllUsers,
+      },
+      {
+        path: "allBloodDonationRequest",
+        Component: AllBloodDonationRequest,
       },
       // admin dashboard end
     ],
