@@ -202,7 +202,7 @@ const DonarHome = () => {
             <Link
               to={"/dashboard/my-donation-requests"}
               type="button"
-              className="btn btn-primary btn-wide shadow-lg gap-2"
+              className="btn btn-primary text-black btn-wide shadow-lg gap-2"
             >
               View My All Requests <FaArrowRight />
             </Link>
