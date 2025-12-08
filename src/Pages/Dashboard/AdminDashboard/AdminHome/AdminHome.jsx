@@ -5,7 +5,7 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { FaUsers, FaHandHoldingUsd, FaFileAlt } from "react-icons/fa"; // Using FaUsers, FaHandHoldingUsd, FaFileAlt for relevance
 import { BiSolidDonateBlood } from "react-icons/bi"; // Using BiSolidDonateBlood
 
-const AdminHome = () => {
+const AdminHome = ({ role }) => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
@@ -33,15 +33,17 @@ const AdminHome = () => {
   return (
     <Container>
       <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
-        <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-10 border-l-8 border-red-600 flex items-center justify-between">
+        <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-10 border-l-8 border-red-600 md:flex items-center justify-between">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 flex items-center gap-3">
               <BiSolidDonateBlood className="text-red-600" />
-              BloodLink – Admin Dashboard
+              BloodLink – {role === "volunteer" ? <>Volunteer </> : <>Admin   </>}
+              Dashboard
             </h2>
             <p className="text-lg text-gray-500 mt-2">
-              Welcome, <span className="font-bold">{user?.displayName || "Admin"}</span>! Here's a snapshot of your
-              system's performance.
+              Welcome,{" "}
+              <span className="font-bold">{user?.displayName || "Admin"}</span>!
+              Here's a snapshot of your system's performance.
             </p>
           </div>
           <div className="stats shadow mt-8 bg-gray-300">
@@ -53,7 +55,9 @@ const AdminHome = () => {
                   </div>
                 </div>
               </div>
-              <div className="stat-title">Admin</div>
+              <div className="stat-title">
+                {role === "volunteer" ? <>Volunteer</> : <>Admin</>}
+              </div>
               <div className="stat-value">
                 {user?.displayName?.split(" ")[0] || "Admin"}
               </div>

@@ -15,6 +15,7 @@ import AdminHome from "../Pages/Dashboard/AdminDashboard/AdminHome/AdminHome";
 import DashboardRoleBasedPage from "../Components/Dashboard/DashboardRoleBasedPage";
 import AllUsers from "../Pages/Dashboard/AdminDashboard/Pages/AllUsers/AllUsers";
 import AllBloodDonationRequest from "../Pages/Dashboard/AdminDashboard/Pages/AllBloodDonationRequest/AllBloodDonationRequest";
+import VolunteerHome from "../Pages/Dashboard/VolunteerDashboard/VolunteerHome/VolunteerHome";
 
 const router = createBrowserRouter([
   {
@@ -119,14 +120,21 @@ const router = createBrowserRouter([
         Component: AdminHome,
       },
       {
-        path: "allUsers",
+        path: "all-users",
         Component: AllUsers,
       },
       {
-        path: "allBloodDonationRequest",
+        path: "all-blood-donation-request",
         Component: AllBloodDonationRequest,
       },
       // admin dashboard end
+
+      // volunteer dashboard stat
+      {
+        index: true,
+        Component: VolunteerHome,
+      },
+      // volunteer dashboard end
     ],
   },
 ]);

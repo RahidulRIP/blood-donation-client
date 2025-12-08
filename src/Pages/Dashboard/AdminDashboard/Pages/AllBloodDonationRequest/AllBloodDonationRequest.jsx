@@ -12,6 +12,7 @@ import { FaCheck, FaEye, FaFilter } from "react-icons/fa6";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
+import Loader from "../../../../../Components/Shared/Loader";
 
 const AllBloodDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
@@ -25,6 +26,17 @@ const AllBloodDonationRequest = () => {
       return res?.data;
     },
   });
+
+  // single user start
+  const { data: userData = {}, isLoading } = useQuery({
+    queryKey: ["userData", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users?email=${user?.email}`);
+      return res?.data[0];
+    },
+    enabled: !!user?.email,
+  });
+  // single user end
 
   //   fitter functionalities start
   const [filteredData, setFilteredData] = useState([]);
@@ -82,6 +94,10 @@ const AllBloodDonationRequest = () => {
       }
     });
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <div>
       {/*  */}
@@ -215,56 +231,65 @@ const AllBloodDonationRequest = () => {
                   </td>
 
                   {/* Actions */}
-                  <td>
-                    <div className="flex items-center justify-center gap-2">
-                      {/* Edit */}
-                      <div className="tooltip" data-tip="Edit">
-                        <Link
-                          to={`/dashboard/updateDonarReqData/${data._id}`}
-                          className="btn btn-square btn-sm btn-ghost text-blue-600 hover:bg-blue-100"
-                        >
-                          <FaEdit size={16} />
-                        </Link>
-                      </div>
 
-                      {/* Delete */}
-                      <div className="tooltip" data-tip="Delete">
-                        <button
-                          onClick={() => handleDeleteDonarReq(`${data._id}`)}
-                          className="btn btn-square btn-sm btn-ghost text-red-600 hover:bg-red-100"
-                        >
-                          <FaTrashAlt size={16} />
-                        </button>
-                      </div>
+                  {userData?.role === "volunteer" ? (
+                    ""
+                  ) : (
+                    <>
+                      <td>
+                        <div className="flex items-center justify-center gap-2">
+                          {/* Edit */}
+                          <div className="tooltip" data-tip="Edit">
+                            <Link
+                              to={`/dashboard/updateDonarReqData/${data._id}`}
+                              className="btn btn-square btn-sm btn-ghost text-blue-600 hover:bg-blue-100"
+                            >
+                              <FaEdit size={16} />
+                            </Link>
+                          </div>
 
-                      {/* View Details */}
-                      <div className="tooltip" data-tip="View Details">
-                        <Link
-                          to={`/dashboard/detailsDonarReqData/${data._id}`}
-                          className="btn btn-square btn-sm btn-ghost text-gray-600 hover:bg-gray-200"
-                          state={donationReqData}
-                        >
-                          <FaEye size={16} />
-                        </Link>
-                      </div>
-
-                      {/* In Progress Specific Actions */}
-                      {data?.donation_status === "inprogress" && (
-                        <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
-                          <div className="tooltip" data-tip="Mark Done">
-                            <button className="btn btn-square btn-sm btn-success text-white">
-                              <FaCheck size={14} />
+                          {/* Delete */}
+                          <div className="tooltip" data-tip="Delete">
+                            <button
+                              onClick={() =>
+                                handleDeleteDonarReq(`${data._id}`)
+                              }
+                              className="btn btn-square btn-sm btn-ghost text-red-600 hover:bg-red-100"
+                            >
+                              <FaTrashAlt size={16} />
                             </button>
                           </div>
-                          <div className="tooltip" data-tip="Cancel">
-                            <button className="btn btn-square btn-sm btn-error text-white">
-                              <FaTimes size={14} />
-                            </button>
+
+                          {/* View Details */}
+                          <div className="tooltip" data-tip="View Details">
+                            <Link
+                              to={`/dashboard/detailsDonarReqData/${data._id}`}
+                              className="btn btn-square btn-sm btn-ghost text-gray-600 hover:bg-gray-200"
+                              state={donationReqData}
+                            >
+                              <FaEye size={16} />
+                            </Link>
                           </div>
+
+                          {/* In Progress Specific Actions */}
+                          {data?.donation_status === "inprogress" && (
+                            <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
+                              <div className="tooltip" data-tip="Mark Done">
+                                <button className="btn btn-square btn-sm btn-success text-white">
+                                  <FaCheck size={14} />
+                                </button>
+                              </div>
+                              <div className="tooltip" data-tip="Cancel">
+                                <button className="btn btn-square btn-sm btn-error text-white">
+                                  <FaTimes size={14} />
+                                </button>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </td>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

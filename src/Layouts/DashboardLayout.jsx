@@ -126,7 +126,7 @@ const DashboardLayout = () => {
                   </li>
                   <li>
                     <NavLink
-                      to={"/dashboard/allUsers"}
+                      to={"/dashboard/all-users"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                       data-tip="All Users"
                     >
@@ -136,11 +136,11 @@ const DashboardLayout = () => {
                   </li>
                   <li>
                     <NavLink
-                      to={"/dashboard/allBloodDonationRequest"}
+                      to={"/dashboard/all-blood-donation-request"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                       data-tip="All BloodDonation Request"
                     >
-                      <GiBlood size={20} className="text-red-500"/>
+                      <GiBlood size={20} className="text-red-500" />
                       <span className="is-drawer-close:hidden">
                         All BloodDonation Request
                       </span>
@@ -149,6 +149,32 @@ const DashboardLayout = () => {
                 </>
               )}
               {/* Admin Dashboard Link end  */}
+              {userData?.role === "volunteer" && (
+                <>
+                  <li>
+                    <NavLink
+                      to={"/dashboard"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Home (Volunteer )"
+                    >
+                      <FaHome size={20} />
+                      <span className="is-drawer-close:hidden">Home</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"/dashboard/all-blood-donation-request"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="All BloodDonation Request (Volunteer)"
+                    >
+                      <GiBlood size={20} className="text-red-500" />
+                      <span className="is-drawer-close:hidden">
+                        All BloodDonation Request
+                      </span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

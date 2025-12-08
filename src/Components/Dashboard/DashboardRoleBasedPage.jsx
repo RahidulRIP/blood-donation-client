@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loader from "../Shared/Loader";
 import DonarHome from "../../Pages/Dashboard/DonarDashboard/DonarHome/DonarHome";
 import AdminHome from "../../Pages/Dashboard/AdminDashboard/AdminHome/AdminHome";
+import VolunteerHome from "../../Pages/Dashboard/VolunteerDashboard/VolunteerHome/VolunteerHome";
 
 const DashboardRoleBasedPage = () => {
   const { user } = useAuth();
@@ -24,6 +25,7 @@ const DashboardRoleBasedPage = () => {
 
   if (userData.role === "donor") return <DonarHome />;
   if (userData.role === "admin") return <AdminHome />;
+  if (userData.role === "volunteer") return <VolunteerHome />;
 
   return <p>No role found</p>;
 };

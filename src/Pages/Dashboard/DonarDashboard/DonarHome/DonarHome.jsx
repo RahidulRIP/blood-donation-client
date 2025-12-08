@@ -3,15 +3,15 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import useAuth from "../../../../hooks/useAuth";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
-import { 
-  FaEdit, 
-  FaTrashAlt, 
-  FaEye, 
-  FaCheck, 
-  FaTimes, 
-  FaArrowRight, 
+import {
+  FaEdit,
+  FaTrashAlt,
+  FaEye,
+  FaCheck,
+  FaTimes,
+  FaArrowRight,
   FaTint,
-  FaMapMarkerAlt
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 
 const DonarHome = () => {
@@ -64,19 +64,25 @@ const DonarHome = () => {
           <div className="mb-8 flex flex-col md:flex-row justify-between items-center bg-white p-6 rounded-xl shadow-sm border-l-8 border-red-500">
             <div>
               <h2 className="text-2xl md:text-3xl text-gray-800">
-                Welcome, <span className="font-bold text-red-600">{user?.displayName}</span>!
+                Welcome,{" "}
+                <span className="font-bold text-red-600">
+                  {user?.displayName}
+                </span>
+                !
               </h2>
               <p className="text-gray-500 mt-1 flex items-center gap-2">
                 <FaTint className="text-red-500" /> Every drop you give matters.
               </p>
             </div>
             <div className="mt-4 md:mt-0">
-               <div className="stats shadow">
-                  <div className="stat place-items-center">
-                    <div className="stat-title">Recent Requests</div>
-                    <div className="stat-value text-red-500">{donationReqData.length}</div>
+              <div className="stats shadow">
+                <div className="stat place-items-center">
+                  <div className="stat-title">Recent Requests</div>
+                  <div className="stat-value text-red-500">
+                    {donationReqData.length}
                   </div>
-               </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -98,27 +104,39 @@ const DonarHome = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {donationReqData.map((data, i) => (
-                    <tr key={data._id} className="hover:bg-red-50 transition-colors duration-200">
+                    <tr
+                      key={data._id}
+                      className="hover:bg-red-50 transition-colors duration-200"
+                    >
                       <th className="pl-6 text-gray-400">{i + 1}</th>
-                      
+
                       {/* Recipient Name */}
                       <td>
-                        <div className="font-bold text-gray-800">{data?.recipient_name}</div>
+                        <div className="font-bold text-gray-800">
+                          {data?.recipient_name}
+                        </div>
                       </td>
 
                       {/* Location */}
                       <td>
                         <div className="flex items-center gap-1 text-sm text-gray-600">
                           <FaMapMarkerAlt className="text-gray-400" />
-                          <span>{data?.recipient_upazila}, {data?.recipient_district}</span>
+                          <span>
+                            {data?.recipient_upazila},{" "}
+                            {data?.recipient_district}
+                          </span>
                         </div>
                       </td>
 
                       {/* Date & Time */}
                       <td>
                         <div className="text-sm">
-                          <div className="font-medium text-gray-800">{data?.donation_date}</div>
-                          <div className="text-xs text-gray-500">{data?.donation_time}</div>
+                          <div className="font-medium text-gray-800">
+                            {data?.donation_date}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {data?.donation_time}
+                          </div>
                         </div>
                       </td>
 
@@ -131,10 +149,15 @@ const DonarHome = () => {
 
                       {/* Status */}
                       <td>
-                        <div className={`badge font-medium ${
-                            data?.donation_status === 'inprogress' ? 'badge-warning' : 
-                            data?.donation_status === 'done' ? 'badge-success text-white' : 'badge-ghost'
-                        }`}>
+                        <div
+                          className={`badge font-medium ${
+                            data?.donation_status === "inprogress"
+                              ? "badge-warning"
+                              : data?.donation_status === "done"
+                              ? "badge-success text-white"
+                              : "badge-ghost"
+                          }`}
+                        >
                           {data?.donation_status}
                         </div>
                       </td>
@@ -155,7 +178,9 @@ const DonarHome = () => {
                           {/* Delete */}
                           <div className="tooltip" data-tip="Delete">
                             <button
-                              onClick={() => handleDeleteDonarReq(`${data._id}`)}
+                              onClick={() =>
+                                handleDeleteDonarReq(`${data._id}`)
+                              }
                               className="btn btn-square btn-sm btn-ghost text-red-600 hover:bg-red-100"
                             >
                               <FaTrashAlt size={16} />
@@ -176,16 +201,16 @@ const DonarHome = () => {
                           {/* In Progress Specific Actions */}
                           {data?.donation_status === "inprogress" && (
                             <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
-                                <div className="tooltip" data-tip="Mark Done">
-                                  <button className="btn btn-square btn-sm btn-success text-white">
-                                    <FaCheck size={14} />
-                                  </button>
-                                </div>
-                                <div className="tooltip" data-tip="Cancel">
-                                  <button className="btn btn-square btn-sm btn-error text-white">
-                                    <FaTimes size={14} />
-                                  </button>
-                                </div>
+                              <div className="tooltip" data-tip="Mark Done">
+                                <button className="btn btn-square btn-sm btn-success text-white">
+                                  <FaCheck size={14} />
+                                </button>
+                              </div>
+                              <div className="tooltip" data-tip="Cancel">
+                                <button className="btn btn-square btn-sm btn-error text-white">
+                                  <FaTimes size={14} />
+                                </button>
+                              </div>
                             </div>
                           )}
                         </div>
@@ -209,7 +234,9 @@ const DonarHome = () => {
           </div>
         </div>
       ) : (
-        ""
+        <h2 className="text-center text-4xl text-warning font-bold">
+          No Request Created Yet
+        </h2>
       )}
     </div>
   );
