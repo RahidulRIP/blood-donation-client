@@ -265,7 +265,6 @@ const AllBloodDonationRequest = () => {
                             <Link
                               to={`/dashboard/detailsDonarReqData/${data._id}`}
                               className="btn btn-square btn-sm btn-ghost text-gray-600 hover:bg-gray-200"
-                              state={donationReqData}
                             >
                               <FaEye size={16} />
                             </Link>

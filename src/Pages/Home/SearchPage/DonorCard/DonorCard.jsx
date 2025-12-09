@@ -2,11 +2,10 @@ import { FaTint, FaUserCircle } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa6";
 import { ImLocation2 } from "react-icons/im";
 
-const DonorCard = ({ machDonor }) => {
-  //   console.log(donorUsers);
+const DonorCard = ({ machDonor, searched }) => {
   return (
     <div className="pb-6 md:pb-20">
-      {machDonor.length ? (
+      {machDonor?.length ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8  ">
           {machDonor.map((donor) => (
             <div
@@ -19,7 +18,7 @@ const DonorCard = ({ machDonor }) => {
                   <div className="avatar">
                     <div className="w-16 rounded-full ring ring-red-500 ring-offset-base-100 ring-offset-2">
                       {donor.photoURL ? (
-                        <img src={donor.photoURL} alt={name} />
+                        <img src={donor.photoURL} />
                       ) : (
                         <FaUserCircle className="w-full h-full text-gray-400 p-1" />
                       )}
@@ -105,13 +104,13 @@ const DonorCard = ({ machDonor }) => {
           ))}
         </div>
       ) : (
-        <>
-          <div>
+        <div>
+          {searched && (
             <h2 className="text-red-300 text-center text-2xl font-black">
               No donor found in that information
             </h2>
-          </div>
-        </>
+          )}
+        </div>
       )}
     </div>
   );

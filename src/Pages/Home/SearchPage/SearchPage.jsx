@@ -8,13 +8,15 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import DonorCard from "./DonorCard/DonorCard";
 import { useState } from "react";
+import Loader from "../../../Components/Shared/Loader";
 
 const SearchPage = () => {
   const [machDonor, setMachDonor] = useState([]);
+  const [searched, setSearched] = useState(false);
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   // total users
-  const { data: usersData = [] } = useQuery({
+  const { data: usersData = [], isLoading } = useQuery({
     queryKey: ["usersData"],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users`);
@@ -24,9 +26,6 @@ const SearchPage = () => {
   });
 
   const donorUsers = usersData.filter((userData) => userData.role === "donor");
-
-  // console.log(usersData);
-  console.log(donorUsers);
 
   const districts = useLoadDistricts();
   const upazilas = useLoadUpazilas();
@@ -54,7 +53,7 @@ const SearchPage = () => {
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   const handleDonorSearch = (data) => {
-    console.log(data);
+    // console.log(data);
 
     const filteredUsers = donorUsers.filter(
       (donorUser) =>
@@ -63,8 +62,12 @@ const SearchPage = () => {
         donorUser?.upazila === data?.upazila
     );
     setMachDonor(filteredUsers);
+    setSearched(true);
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <Container>
       <div className="flex items-center justify-center my-12 md:my-16 p-3.5">
@@ -181,7 +184,7 @@ const SearchPage = () => {
             {/* Search Button */}
             <button
               type="submit"
-              className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2 mt-8"
+              className="w-full bg-primary hover:text-white font-bold py-3 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2 mt-8"
             >
               <FaSearch /> Search Donors
             </button>
@@ -189,7 +192,7 @@ const SearchPage = () => {
         </div>
       </div>
       <div>
-        <DonorCard machDonor={machDonor} />
+        <DonorCard machDonor={machDonor} searched={searched} />
       </div>
     </Container>
   );

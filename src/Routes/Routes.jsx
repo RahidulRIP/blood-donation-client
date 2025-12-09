@@ -19,6 +19,7 @@ import VolunteerHome from "../Pages/Dashboard/VolunteerDashboard/VolunteerHome/V
 import FundingLinks from "../Pages/Home/FundingLinks/FundingLinks";
 import SearchPage from "../Pages/Home/SearchPage/SearchPage";
 import DonationRequestPublic from "../Pages/Home/DonationRequestPublic/DonationRequestPublic";
+import DonateBlood from "../Pages/Home/DonateBlood/DonateBlood";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
         Component: Login,
       },
       {
-        path: "donation-request",
+        path: "donation-request-public",
         Component: DonationRequestPublic,
       },
       {
@@ -53,6 +54,14 @@ const router = createBrowserRouter([
       {
         path: "search-page",
         element: <SearchPage />,
+      },
+      {
+        path: "donate-blood",
+        element: (
+          <PrivateRoute>
+            <DonateBlood />
+          </PrivateRoute>
+        ),
       },
     ],
   },

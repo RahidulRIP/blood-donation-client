@@ -1,6 +1,5 @@
-import { useLocation, useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import {
-  FaUser,
   FaHospital,
   FaCalendarAlt,
   FaClock,
@@ -10,14 +9,23 @@ import {
   FaCommentDots,
   FaArrowLeft,
 } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 
 const DetailsDonarReqData = () => {
-  const location = useLocation();
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
-  const allDonarReqData = location?.state;
   const { id } = useParams();
 
-  const detailsData = allDonarReqData?.find((data) => data._id === id);
+  const { data: detailsData = [] } = useQuery({
+    queryKey: ["donarReqSingleData", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `http://localhost:9000/create-donation-request/${id}`
+      );
+      return res?.data;
+    },
+  });
 
   const {
     donation_date,

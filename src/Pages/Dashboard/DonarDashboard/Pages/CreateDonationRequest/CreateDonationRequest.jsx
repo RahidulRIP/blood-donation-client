@@ -255,6 +255,7 @@ const CreateDonationRequest = () => {
                         type="date"
                         placeholder="full address of recipient location "
                         className="input input-bordered w-full pl-10 outline-none"
+                        min={new Date().toISOString().split("T")[0]}
                       />
                       <FaCalendarAlt className="absolute top-3.5 left-3 z-1  text-gray-400" />
                     </div>

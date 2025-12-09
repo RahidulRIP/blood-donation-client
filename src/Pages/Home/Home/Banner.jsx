@@ -8,7 +8,7 @@ import bannerImg3 from "../../../assets/banner_3.jpeg";
 import bannerImg4 from "../../../assets/banner_4.jpeg";
 import bannerImg5 from "../../../assets/banner_5.jpeg";
 import useAuth from "../../../hooks/useAuth";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Banner = () => {
   const { user } = useAuth();
@@ -81,14 +81,16 @@ const Banner = () => {
                         <FaHeart size={20} />
                         {user?.email
                           ? `Welcome ${user?.displayName}`
-                          : "Join as a donor"}
+                          : "Join as a Donor"}
                       </button>
-
                       {/* Search Button */}
-                      <button className="flex items-center gap-2 rounded-full border-2 border-white px-6 py-3 text-sm sm:text-lg font-semibold transition duration-300 hover:bg-white hover:text-red-600">
+                      <Link
+                        to={"/search-page"}
+                        className="flex items-center gap-2 rounded-full border-2 border-white px-6 py-3 text-sm sm:text-lg font-semibold transition duration-300 hover:bg-white hover:text-red-600"
+                      >
                         <FaSearch size={20} />
                         Search Donors
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
