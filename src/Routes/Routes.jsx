@@ -16,6 +16,9 @@ import DashboardRoleBasedPage from "../Components/Dashboard/DashboardRoleBasedPa
 import AllUsers from "../Pages/Dashboard/AdminDashboard/Pages/AllUsers/AllUsers";
 import AllBloodDonationRequest from "../Pages/Dashboard/AdminDashboard/Pages/AllBloodDonationRequest/AllBloodDonationRequest";
 import VolunteerHome from "../Pages/Dashboard/VolunteerDashboard/VolunteerHome/VolunteerHome";
+import DonationRequest from "../Pages/Home/DonationRequest/DonationRequest";
+import FundingLinks from "../Pages/Home/FundingLinks/FundingLinks";
+import SearchPage from "../Pages/Home/SearchPage/SearchPage";
 
 const router = createBrowserRouter([
   {
@@ -30,20 +33,26 @@ const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
-        loader: async () => {
-          const [districtsRes, upazilasRes] = await Promise.all([
-            fetch("/districts.json"),
-            fetch("/upazilas.json"),
-          ]);
-          const districts = await districtsRes.json();
-          const upazilas = await upazilasRes.json();
-
-          return { districts, upazilas };
-        },
       },
       {
         path: "login",
         Component: Login,
+      },
+      {
+        path: "donation-request",
+        Component: DonationRequest,
+      },
+      {
+        path: "funding-links",
+        element: (
+          <PrivateRoute>
+            <FundingLinks />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "search-page",
+        element: <SearchPage />,
       },
     ],
   },
@@ -69,44 +78,14 @@ const router = createBrowserRouter([
         path: "profile",
         index: true,
         Component: MyProfile,
-        loader: async () => {
-          const [districtsRes, upazilasRes] = await Promise.all([
-            fetch("/districts.json"),
-            fetch("/upazilas.json"),
-          ]);
-          const districts = await districtsRes.json();
-          const upazilas = await upazilasRes.json();
-
-          return { districts, upazilas };
-        },
       },
       {
         path: "create-donation-request",
         Component: CreateDonationRequest,
-        loader: async () => {
-          const [districtsRes, upazilasRes] = await Promise.all([
-            fetch("/districts.json"),
-            fetch("/upazilas.json"),
-          ]);
-          const districts = await districtsRes.json();
-          const upazilas = await upazilasRes.json();
-
-          return { districts, upazilas };
-        },
       },
       {
         path: "updateDonarReqData/:id",
         Component: UpdateDonarReqData,
-        loader: async () => {
-          const [districtsRes, upazilasRes] = await Promise.all([
-            fetch("/districts.json"),
-            fetch("/upazilas.json"),
-          ]);
-          const districts = await districtsRes.json();
-          const upazilas = await upazilasRes.json();
-
-          return { districts, upazilas };
-        },
       },
       {
         path: "detailsDonarReqData/:id",

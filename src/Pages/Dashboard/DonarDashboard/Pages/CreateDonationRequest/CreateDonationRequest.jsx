@@ -1,18 +1,22 @@
 import { useState } from "react";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import { useForm, useWatch } from "react-hook-form";
-import { Link, useLoaderData } from "react-router";
 import { FiMail, FiUser } from "react-icons/fi";
 import { FaCalendarAlt, FaMapMarkerAlt, FaRegFileAlt } from "react-icons/fa";
 import Container from "../../../../../Components/Container/Container";
 import { FaClock, FaHospital } from "react-icons/fa6";
 import useAuth from "../../../../../hooks/useAuth";
 import { toast } from "react-toastify";
+import useLoadDistricts from "../../../../../hooks/useLoadDistricts";
+import useLoadUpazilas from "../../../../../hooks/useLoadUpazilas";
 
 const CreateDonationRequest = () => {
+  const districts = useLoadDistricts();
+  const upazilas = useLoadUpazilas();
+
   const [error, setError] = useState("");
   const axiosSecure = useAxiosSecure();
-  const { districts, upazilas } = useLoaderData();
+  // const { upazilas } = useLoaderData();
   const { user } = useAuth();
   const {
     register,

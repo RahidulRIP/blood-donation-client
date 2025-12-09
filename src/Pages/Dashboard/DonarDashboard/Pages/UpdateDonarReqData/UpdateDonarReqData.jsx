@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import { useForm, useWatch } from "react-hook-form";
-import { useLoaderData, useParams } from "react-router";
+import { useParams } from "react-router";
 import { FiMail, FiUser } from "react-icons/fi";
 import { FaCalendarAlt, FaMapMarkerAlt, FaRegFileAlt } from "react-icons/fa";
 import Container from "../../../../../Components/Container/Container";
@@ -9,8 +9,13 @@ import { FaClock, FaHospital } from "react-icons/fa6";
 import useAuth from "../../../../../hooks/useAuth";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
+import useLoadDistricts from "../../../../../hooks/useLoadDistricts";
+import useLoadUpazilas from "../../../../../hooks/useLoadUpazilas";
 
 const UpdateDonarReqData = () => {
+  const districts = useLoadDistricts();
+  const upazilas = useLoadUpazilas();
+
   const axiosSecure = useAxiosSecure();
   const { id } = useParams();
   // console.log(id);
@@ -30,7 +35,6 @@ const UpdateDonarReqData = () => {
 
   const [error, setError] = useState("");
 
-  const { districts, upazilas } = useLoaderData();
   const { user } = useAuth();
   const {
     register,

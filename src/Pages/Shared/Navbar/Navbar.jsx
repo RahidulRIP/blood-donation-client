@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Container from "../../../Components/Container/Container";
-import logo from "../../../assets/AICraftLogo.png";
 import { TfiMenuAlt } from "react-icons/tfi";
 import useAuth from "../../../hooks/useAuth";
 import { Link, NavLink } from "react-router";
+import Logo from "../../../Components/Shared/Logo";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,6 +28,15 @@ const Navbar = () => {
     <>
       <li>
         <NavLink to={"/"}>HOME</NavLink>
+      </li>
+      <li>
+        <NavLink to={"/donation-request"}>DONATION REQUEST</NavLink>
+      </li>
+      <li>
+        <NavLink to={"/funding-links"}>FUNDING LINKS</NavLink>
+      </li>
+      <li>
+        <NavLink to={"/search-page"}>SEARCH PAGE</NavLink>
       </li>
     </>
   );
@@ -66,13 +75,9 @@ const Navbar = () => {
                 {links}
               </ul>
             </div>
-            <div className="flex items-center gap-4">
-              <Link to={"/"}>
-                <img className="w-20 h-14 object-cover" src={logo} alt="" />
-              </Link>
-              <h2 className="font-bold text-2xl text-teal-600">
-                Blood Donation
-              </h2>
+
+            <div>
+              <Logo />
             </div>
           </div>
           <div className="navbar-center hidden lg:flex ">
@@ -114,16 +119,13 @@ const Navbar = () => {
 
                 {user && clickProfile && (
                   <div className="absolute right-0 mt-3 w-fit bg-base-200 rounded-xl shadow-lg border border-base-300 z-50 animate-fadeIn">
-                    <div className="p-4 space-y-3 w-64">
+                    <div className="p-4 space-y-2 w-64">
                       <h3 className="font-semibold text-base text-teal-700">
                         {user?.displayName}
                       </h3>
                       <h3 className=" text-base font-medium">{user?.email}</h3>
                       <h3>
-                        <Link
-                          to={"/dashboard"}
-                          className="btn btn-dash w-full"
-                        >
+                        <Link to={"/dashboard"} className="btn btn-dash w-full">
                           DashBoard
                         </Link>
                       </h3>

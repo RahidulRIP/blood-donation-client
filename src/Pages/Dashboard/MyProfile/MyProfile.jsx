@@ -3,10 +3,12 @@ import Container from "../../../Components/Container/Container";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Form from "../../../Components/Dashboard/Form";
-import { useLoaderData } from "react-router";
+import useLoadDistricts from "../../../hooks/useLoadDistricts";
+import useLoadUpazilas from "../../../hooks/useLoadUpazilas";
 
 const MyProfile = () => {
-  const { districts, upazilas } = useLoaderData();
+  const districts = useLoadDistricts();
+  const upazilas = useLoadUpazilas();
 
   const axiosSecure = useAxiosSecure();
 

@@ -1,6 +1,6 @@
-import logo from "../../../assets/AICraftLogo.png";
 import { FaGithub, FaXTwitter, FaFacebookF, FaYoutube } from "react-icons/fa6";
 import Container from "../../../Components/Container/Container";
+import Logo from "../../../Components/Shared/Logo";
 
 const Footer = () => {
   return (
@@ -10,19 +10,13 @@ const Footer = () => {
           {/* Top Section */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-center border-b border-gray-700 pb-6">
             {/* Brand */}
-            <div className="flex items-center gap-4">
-              <img
-                src={logo}
-                alt="Ai Craft Logo"
-                className="w-20 h-20 rounded-2xl"
-              />
+            <div className="flex items-center flex-wrap gap-4">
+              <Logo />
               <div>
                 <h2 className="text-2xl font-semibold text-white tracking-wide">
-                  Ai Craft Ltd.
+                  BloodLink
                 </h2>
-                <p className="text-sm text-gray-400">
-                  Trusted technology solutions since 1992
-                </p>
+                <p className="text-sm text-gray-400">Make a Difference Today</p>
               </div>
             </div>
 
@@ -54,10 +48,11 @@ const Footer = () => {
                 Services
               </h6>
               <div className="flex flex-col gap-1 text-gray-400">
-                <a className="hover:text-white transition">Branding</a>
-                <a className="hover:text-white transition">Design</a>
-                <a className="hover:text-white transition">Marketing</a>
-                <a className="hover:text-white transition">Advertisement</a>
+                <a className="hover:text-white transition">Find a Donor</a>
+                <a className="hover:text-white transition">Request Blood</a>
+                <a className="hover:text-white transition">Donor Registration</a>
+                <a className="hover:text-white transition">LifeStream</a>
+                
               </div>
             </div>
 
@@ -86,22 +81,19 @@ const Footer = () => {
                 Newsletter
               </h6>
               <p className="text-gray-400 mb-3">Get the latest updates</p>
-              <div className="flex">
+              <div>
                 <input
                   type="text"
                   placeholder="Your email"
                   className="input input-bordered w-full rounded-l-lg bg-[#1c1c1c] border-gray-700 text-gray-200"
                 />
-                <button className="px-4 bg-white text-black font-semibold rounded-r-lg hover:bg-gray-200 transition">
-                  Join
-                </button>
               </div>
             </div>
           </div>
 
           {/* Bottom Text */}
           <p className="text-center text-gray-500 text-sm pt-5 border-t border-gray-700">
-            © {new Date().getFullYear()} Ai Craft Ltd. All rights reserved.
+            © {new Date().getFullYear()} BloodLink All rights reserved.
           </p>
         </footer>
       </Container>

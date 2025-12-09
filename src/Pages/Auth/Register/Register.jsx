@@ -4,12 +4,17 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FiImage, FiLock, FiMail, FiUser } from "react-icons/fi";
 import { useForm, useWatch } from "react-hook-form";
-import { Link, useLoaderData, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Container from "../../../Components/Container/Container";
 import { toast } from "react-toastify";
 import Loader from "../../../Components/Shared/Loader";
+import useLoadDistricts from "../../../hooks/useLoadDistricts";
+import useLoadUpazilas from "../../../hooks/useLoadUpazilas";
 
 const Register = () => {
+  const districts = useLoadDistricts();
+  const upazilas = useLoadUpazilas();
+
   const { createUser, updateUserProfile } = useAuth();
 
   const [eyes, setEyes] = useState(false);
@@ -23,15 +28,13 @@ const Register = () => {
     control,
   } = useForm();
 
-  const { districts, upazilas } = useLoaderData();
   const districtsOnly = districts.map((data) => data.name);
 
   const watchChangingDistrict = useWatch({ name: "district", control });
 
-  // function that return all upazilas districts wise 
+  // function that return all upazilas districts wise
   const upazilasByDistrict = (data) => {
     const districtData = districts.find((d) => d.name === data);
-
     const selected_District_Id = districtData?.id;
     const districtWiseUpazilasData = upazilas.filter(
       (u) => u.district_id === selected_District_Id
@@ -249,6 +252,7 @@ const Register = () => {
                       required: "Select your upazila",
                     })}
                     className="select select-bordered w-full focus:outline-none focus:ring-2 focus:ring-accent"
+                    disabled={!watchChangingDistrict}
                   >
                     <option disabled>Select upazila</option>
 

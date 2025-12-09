@@ -211,7 +211,6 @@ const Form = ({ userData, districts, upazilas, refetch }) => {
                   Upazila
                 </label>
                 <select
-                  defaultValue={userData?.upazila}
                   {...register("upazila", {
                     required: "Select your upazila",
                   })}
