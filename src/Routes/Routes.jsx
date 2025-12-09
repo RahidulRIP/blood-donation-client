@@ -16,9 +16,9 @@ import DashboardRoleBasedPage from "../Components/Dashboard/DashboardRoleBasedPa
 import AllUsers from "../Pages/Dashboard/AdminDashboard/Pages/AllUsers/AllUsers";
 import AllBloodDonationRequest from "../Pages/Dashboard/AdminDashboard/Pages/AllBloodDonationRequest/AllBloodDonationRequest";
 import VolunteerHome from "../Pages/Dashboard/VolunteerDashboard/VolunteerHome/VolunteerHome";
-import DonationRequest from "../Pages/Home/DonationRequest/DonationRequest";
 import FundingLinks from "../Pages/Home/FundingLinks/FundingLinks";
 import SearchPage from "../Pages/Home/SearchPage/SearchPage";
+import DonationRequestPublic from "../Pages/Home/DonationRequestPublic/DonationRequestPublic";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: "donation-request",
-        Component: DonationRequest,
+        Component: DonationRequestPublic,
       },
       {
         path: "funding-links",

@@ -3,8 +3,31 @@ import Container from "../../../Components/Container/Container";
 import useLoadDistricts from "../../../hooks/useLoadDistricts";
 import useLoadUpazilas from "../../../hooks/useLoadUpazilas";
 import { FaSearch, FaTint } from "react-icons/fa";
+import useAuth from "../../../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import DonorCard from "./DonorCard/DonorCard";
+import { useState } from "react";
 
 const SearchPage = () => {
+  const [machDonor, setMachDonor] = useState([]);
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  // total users
+  const { data: usersData = [] } = useQuery({
+    queryKey: ["usersData"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users`);
+      return res?.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  const donorUsers = usersData.filter((userData) => userData.role === "donor");
+
+  // console.log(usersData);
+  console.log(donorUsers);
+
   const districts = useLoadDistricts();
   const upazilas = useLoadUpazilas();
 
@@ -30,8 +53,16 @@ const SearchPage = () => {
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
-  const handleSearch = async (data) => {
+  const handleDonorSearch = (data) => {
     console.log(data);
+
+    const filteredUsers = donorUsers.filter(
+      (donorUser) =>
+        donorUser?.blood_group === data?.blood_group &&
+        donorUser?.district === data?.district &&
+        donorUser?.upazila === data?.upazila
+    );
+    setMachDonor(filteredUsers);
   };
 
   return (
@@ -45,7 +76,10 @@ const SearchPage = () => {
             Select the criteria below to quickly locate a nearby blood donor.
           </p>
 
-          <form onSubmit={handleSubmit(handleSearch)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(handleDonorSearch)}
+            className="space-y-6"
+          >
             <section className="space-y-6">
               {/* Blood Group Selection */}
               <div>
@@ -153,6 +187,9 @@ const SearchPage = () => {
             </button>
           </form>
         </div>
+      </div>
+      <div>
+        <DonorCard machDonor={machDonor} />
       </div>
     </Container>
   );
