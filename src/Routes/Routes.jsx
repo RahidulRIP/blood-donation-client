@@ -16,11 +16,12 @@ import DashboardRoleBasedPage from "../Components/Dashboard/DashboardRoleBasedPa
 import AllUsers from "../Pages/Dashboard/AdminDashboard/Pages/AllUsers/AllUsers";
 import AllBloodDonationRequest from "../Pages/Dashboard/AdminDashboard/Pages/AllBloodDonationRequest/AllBloodDonationRequest";
 import VolunteerHome from "../Pages/Dashboard/VolunteerDashboard/VolunteerHome/VolunteerHome";
-import FundingLinks from "../Pages/Home/FundingLinks/FundingLinks";
 import SearchPage from "../Pages/Home/SearchPage/SearchPage";
 import DonationRequestPublic from "../Pages/Home/DonationRequestPublic/DonationRequestPublic";
 import DonateBlood from "../Pages/Home/DonateBlood/DonateBlood";
 import FundingPage from "../Pages/Home/FundingPage/FundingPage";
+import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
+import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancelled";
 
 const router = createBrowserRouter([
   {
@@ -43,14 +44,6 @@ const router = createBrowserRouter([
       {
         path: "donation-request-public",
         Component: DonationRequestPublic,
-      },
-      {
-        path: "funding-links",
-        element: (
-          <PrivateRoute>
-            <FundingLinks />
-          </PrivateRoute>
-        ),
       },
       {
         path: "search-page",
@@ -132,6 +125,17 @@ const router = createBrowserRouter([
         Component: VolunteerHome,
       },
       // volunteer dashboard end
+
+      // payment component start
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancelled",
+        Component: PaymentCancelled,
+      },
+      // payment component end
     ],
   },
 ]);

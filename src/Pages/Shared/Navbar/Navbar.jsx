@@ -32,7 +32,7 @@ const Navbar = () => {
       <li>
         <NavLink to={"/donation-request-public"}>DONATION REQUEST</NavLink>
       </li>
-      
+
       <li>
         <NavLink to={"/search-page"}>SEARCH PAGE</NavLink>
       </li>
@@ -80,9 +80,9 @@ const Navbar = () => {
               </ul>
             </div>
 
-            <div>
+            <Link to={"/"}>
               <Logo />
-            </div>
+            </Link>
           </div>
           <div className="navbar-center hidden lg:flex ">
             <ul

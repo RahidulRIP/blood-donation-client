@@ -135,17 +135,18 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
                   </div>
                 </div>
               </div>
-            
+
               <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-dashed border-primary h-32 overflow-y-auto">
                 <p className="flex items-center gap-2 font-semibold text-primary mb-1">
                   <FaCommentDots /> Message:
                 </p>
-             
+
                 <p className="text-gray-700 italic">"{request_message}"</p>
               </div>
               <button
                 onClick={() => handleChangeStatus(_id)}
                 className="btn btn-primary text-black hover:text-white hover:bg-red-400"
+                disabled={donation_status === "inprogress" && true}
               >
                 DONATE BlOOD
               </button>

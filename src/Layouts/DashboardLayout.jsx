@@ -38,9 +38,9 @@ const DashboardLayout = () => {
               {/* Sidebar toggle icon */}
               <TbLayoutSidebarLeftExpandFilled size={16} />
             </label>
-            <div className="px-4">
+            <Link to={'/'} className="px-4">
               <Logo />
-            </div>
+            </Link>
           </nav>
           <h1></h1>
           {/* Page content here */}

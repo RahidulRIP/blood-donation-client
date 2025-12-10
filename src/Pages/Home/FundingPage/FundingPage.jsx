@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form"; // For the funding form modal
 import { FaPlus, FaCalendarAlt, FaUser, FaDollarSign } from "react-icons/fa"; // React Icons
+import { FcDonate } from "react-icons/fc";
 import useAuth from "../../../hooks/useAuth";
 import Loader from "../../../Components/Shared/Loader";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -12,14 +13,8 @@ const FundingPage = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
 
-  const { data: fundingData = [], refetch } = useQuery({
+  const { data: fundingData = [] } = useQuery({
     queryKey: ["fundingData", user?.email],
     queryFn: async () => {
       const { data } = await axiosSecure.get(
@@ -28,7 +23,14 @@ const FundingPage = () => {
       return data;
     },
   });
-  console.log(fundingData);
+
+  // handling form data
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const handleFundSubmit = async (data) => {
     {
@@ -36,39 +38,34 @@ const FundingPage = () => {
     }
 
     Swal.fire({
-      title: "Confirm Donation",
-      text: `Are you sure you want to donate $${parseInt(data?.amount)}? This action cannot be undone.`,
+      title: "Please confirm if you'd like to proceed!",
+      text: "Your Contribution Creates Hope!",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Donate!",
+      confirmButtonText: "Confirm!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const donationData = {
-          amount: parseInt(data?.amount),
+        setIsModalOpen(false);
+        reset();
+        // stripe start here
+        const paymentInfo = {
+          donation_amount: data?.amount,
           name: data?.name,
-          user_email: user?.email,
-          donate_date: new Date().toLocaleString(),
+          donor_email: user?.email,
         };
-
+        console.log(paymentInfo);
         try {
-          axiosSecure.post("/donation-funds", donationData).then((res) => {
-            if (res?.data?.insertedId) {
-              refetch();
-              Swal.fire({
-                title: "Donation Successful!",
-                text: "Thank you for your generous contribution. It helps us save lives!",
-                icon: "success",
-              });
-            }
-            // closing modal after clicked in donateNow
-            setIsModalOpen(false);
-            reset();
-          });
-        } catch (err) {
-          console.log(err);
+          axiosSecure
+            .post("/create-checkout-session", paymentInfo)
+            .then((res) => {
+              window.open(res.data.url, "_blank");
+            });
+        } catch (error) {
+          console.log(error);
         }
+        // stripe end here
       }
     });
   };
@@ -79,14 +76,14 @@ const FundingPage = () => {
         <h2 className="text-3xl font-bold text-center mb-8 text-primary">
           Organization Funding Tracker
         </h2>
-
         <div className="flex justify-end mb-6">
           <button
             className="btn btn-primary text-black btn-lg shadow-lg"
             // opening modal from here by calling
             onClick={() => setIsModalOpen(true)}
           >
-            <FaPlus className="mr-2 text-red-400" /> Give Fund
+            <FaPlus size={20} className="mr-2 text-red-400 " />
+            Give Fund <FcDonate size={24} className="mr-2 text-red-400 " />
           </button>
         </div>
 
@@ -98,9 +95,15 @@ const FundingPage = () => {
                 <th>
                   <FaUser className="inline mr-1" /> Donor Name
                 </th>
+                <th>
+                  <FaUser className="inline mr-1" /> Donor Email
+                </th>
 
                 <th>
                   <FaDollarSign className="inline mr-1" /> Fund Amount
+                </th>
+                <th>
+                  <FaDollarSign className="inline mr-1" /> Transaction ID
                 </th>
                 <th>
                   <FaCalendarAlt className="inline mr-1" /> Funding Date
@@ -112,10 +115,16 @@ const FundingPage = () => {
               {fundingData.map((data) => (
                 <tr key={data?._id} className="hover:bg-base-100">
                   <td className="font-medium text-gray-700">{data?.name}</td>
+                  <td className="font-medium text-gray-700">
+                    {data?.user_email}
+                  </td>
                   <td>
                     <span className="badge badge-success badge-lg font-bold">
                       {data?.amount} $
                     </span>
+                  </td>
+                  <td className="font-medium text-gray-700">
+                    <span className="text-red-300">{data?.transactionId}</span>
                   </td>
                   <td className="text-sm text-gray-500">{data?.donate_date}</td>
                 </tr>

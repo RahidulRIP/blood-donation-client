@@ -18,7 +18,7 @@ const DonateBlood = () => {
       return res?.data;
     },
   });
-  console.log(donationReqData);
+  // console.log(donationReqData);
   return (
         <Container>
     <div>
