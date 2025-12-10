@@ -32,14 +32,15 @@ const Navbar = () => {
       <li>
         <NavLink to={"/donation-request-public"}>DONATION REQUEST</NavLink>
       </li>
-      <li>
-        <NavLink to={"/funding-links"}>FUNDING LINKS</NavLink>
-      </li>
+      
       <li>
         <NavLink to={"/search-page"}>SEARCH PAGE</NavLink>
       </li>
       <li>
         <NavLink to={"/donate-blood"}>DONATE BLOOD</NavLink>
+      </li>
+      <li>
+        <NavLink to={"/funding-page"}>FUNDING</NavLink>
       </li>
     </>
   );

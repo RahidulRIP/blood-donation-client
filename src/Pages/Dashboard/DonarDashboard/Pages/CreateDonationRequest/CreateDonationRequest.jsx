@@ -21,6 +21,7 @@ const CreateDonationRequest = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
     control,
   } = useForm();
@@ -52,6 +53,7 @@ const CreateDonationRequest = () => {
 
       if (res?.data?.insertedId) {
         toast.success("Donation request created successfully.");
+        reset();
       }
       if (res?.data?.message) {
         toast.error(`${res?.data?.message}`);

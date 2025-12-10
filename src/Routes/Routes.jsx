@@ -20,6 +20,7 @@ import FundingLinks from "../Pages/Home/FundingLinks/FundingLinks";
 import SearchPage from "../Pages/Home/SearchPage/SearchPage";
 import DonationRequestPublic from "../Pages/Home/DonationRequestPublic/DonationRequestPublic";
 import DonateBlood from "../Pages/Home/DonateBlood/DonateBlood";
+import FundingPage from "../Pages/Home/FundingPage/FundingPage";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <DonateBlood />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "funding-page",
+        element: (
+          <PrivateRoute>
+            <FundingPage />
           </PrivateRoute>
         ),
       },

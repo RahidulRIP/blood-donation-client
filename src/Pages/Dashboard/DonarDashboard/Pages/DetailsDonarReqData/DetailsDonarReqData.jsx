@@ -55,7 +55,7 @@ const DetailsDonarReqData = () => {
 
         <div className="card lg:card-side bg-base-100 shadow-xl overflow-hidden border-l-8 border-primary">
           {/* Blood Group Left Section */}
-          <div className="bg-gray-400 flex flex-col items-center justify-center text-primary-content p-8 min-w-[200px]">
+          <div className="bg-gray-400 flex flex-col items-center justify-center text-primary-content p-8 min-w-[230px]">
             <FaTint className="text-6xl mb-2 animate-pulse" />
             <h1 className="text-5xl font-extrabold">{recipient_blood_group}</h1>
             <p className="mt-2 font-medium uppercase tracking-widest">
@@ -101,7 +101,7 @@ const DetailsDonarReqData = () => {
               </div>
 
               {/* address and location  */}
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-3 overflow-y-auto">
                 <FaMapMarkerAlt className="mt-1 text-primary" />
                 <div>
                   <p className="font-semibold">Location</p>
@@ -132,7 +132,7 @@ const DetailsDonarReqData = () => {
                 </div>
               </div>
 
-              {/* Requester Contact  */}
+              {/*  Contact  */}
               <div className="flex items-start gap-3">
                 <FaEnvelope className="mt-1 text-primary" />
                 <div>
@@ -142,8 +142,8 @@ const DetailsDonarReqData = () => {
               </div>
             </div>
 
-            {/* Message Box */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-dashed border-primary">
+            {/* Message*/}
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-dashed border-primary h-32 overflow-y-auto">
               <p className="flex items-center gap-2 font-semibold text-primary mb-1">
                 <FaCommentDots /> Message:
               </p>

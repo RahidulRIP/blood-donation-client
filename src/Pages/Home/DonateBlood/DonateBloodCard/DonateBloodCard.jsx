@@ -47,7 +47,7 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
         <div className="max-w-4xl mx-auto">
           <div className="card lg:card-side bg-base-100 shadow-xl overflow-hidden border-l-8 border-primary">
             {/* Blood Group Left Section */}
-            <div className="bg-gray-400 flex flex-col items-center justify-center text-primary-content p-8 min-w-[200px]">
+            <div className="bg-gray-400 flex flex-col items-center justify-center text-primary-content p-8 min-w-[230px]">
               <FaTint className="text-6xl mb-2 animate-pulse text-red-600" />
               <h1 className="text-5xl font-extrabold">
                 {recipient_blood_group}
@@ -62,8 +62,8 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
                     : "badge-success"
                 } badge-lg`}
               >
-                <h2>
-                  <span className="font-bold text-lg">Status</span> :{" "}
+                <h2 className="flex items-center">
+                  <span className="font-bold text-lg">Status :</span>{" "}
                   {donation_status}
                 </h2>
               </div>
@@ -95,7 +95,7 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
                 </div>
 
                 {/* address and location  */}
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 overflow-y-auto h-20">
                   <FaMapMarkerAlt className="mt-1 text-primary" />
                   <div>
                     <p className="font-semibold">Location</p>
@@ -109,7 +109,7 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
                 </div>
 
                 {/* Donation Date  */}
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 ">
                   <FaCalendarAlt className="mt-1 text-primary" />
                   <div>
                     <p className="font-semibold">Donation Date</p>
@@ -135,12 +135,12 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
                   </div>
                 </div>
               </div>
-
-              {/* Message Box */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-dashed border-primary">
+            
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-dashed border-primary h-32 overflow-y-auto">
                 <p className="flex items-center gap-2 font-semibold text-primary mb-1">
                   <FaCommentDots /> Message:
                 </p>
+             
                 <p className="text-gray-700 italic">"{request_message}"</p>
               </div>
               <button

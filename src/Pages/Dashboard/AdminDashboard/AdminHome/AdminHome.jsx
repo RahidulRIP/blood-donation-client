@@ -9,7 +9,19 @@ const AdminHome = ({ role }) => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
-  const totalFunding = 70.0;
+  const { data: fundsData = [] } = useQuery({
+    queryKey: ["fundingData", user?.email],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(`/donation-funds-data`);
+      return data;
+    },
+  });
+
+  const amounts = fundsData.map((data) => data.amount);
+
+  const totalAmount = amounts.reduce((total, amount) => {
+    return total + amount;
+  }, 0);
 
   // total users
   const { data: usersData = [] } = useQuery({
@@ -37,7 +49,7 @@ const AdminHome = ({ role }) => {
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 flex items-center gap-3">
               <BiSolidDonateBlood className="text-red-600" />
-              BloodLink – {role === "volunteer" ? <>Volunteer </> : <>Admin   </>}
+              BloodLink – {role === "volunteer" ? <>Volunteer </> : <>Admin </>}
               Dashboard
             </h2>
             <p className="text-lg text-gray-500 mt-2">
@@ -88,7 +100,7 @@ const AdminHome = ({ role }) => {
                 <FaHandHoldingUsd size={36} />
               </div>
               <h3 className="card-title text-2xl font-bold text-gray-800">
-                ${totalFunding.toFixed(2)}
+                ${totalAmount.toFixed(2)}
               </h3>
               <p className="text-gray-500 text-sm uppercase tracking-wide">
                 Total Funds Raised

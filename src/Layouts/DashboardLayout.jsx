@@ -1,4 +1,4 @@
-import { FaBox, FaHome } from "react-icons/fa";
+import { FaHome, FaTint } from "react-icons/fa";
 import { GiBlood } from "react-icons/gi";
 import { FiHome } from "react-icons/fi";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
@@ -8,6 +8,8 @@ import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { FaUsers } from "react-icons/fa6";
+import { ImProfile } from "react-icons/im";
+import Logo from "../Components/Shared/Logo";
 
 const DashboardLayout = () => {
   const { user } = useAuth();
@@ -36,8 +38,11 @@ const DashboardLayout = () => {
               {/* Sidebar toggle icon */}
               <TbLayoutSidebarLeftExpandFilled size={16} />
             </label>
-            <div className="px-4">Navbar Title</div>
+            <div className="px-4">
+              <Logo />
+            </div>
           </nav>
+          <h1></h1>
           {/* Page content here */}
           <div className="p-4">
             <Outlet />
@@ -61,7 +66,7 @@ const DashboardLayout = () => {
                   data-tip="Homepage"
                 >
                   {/* Home icon */}
-                  <FiHome size={18} />
+                  <FaTint size={20} className=" animate-pulse text-red-600" />
                   <span className="is-drawer-close:hidden">Homepage</span>
                 </Link>
               </li>
@@ -74,7 +79,7 @@ const DashboardLayout = () => {
                   data-tip="My-Profile"
                 >
                   {/*icon */}
-                  <FaBox size={17} />
+                  <ImProfile size={18} />
                   <span className="is-drawer-close:hidden">My Profile</span>
                 </NavLink>
               </li>

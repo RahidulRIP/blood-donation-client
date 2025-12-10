@@ -25,6 +25,7 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
     control,
   } = useForm();
 
@@ -96,6 +97,7 @@ const Register = () => {
                 axiosSecure.post("/users", userInfo).then((res) => {
                   if (res?.data?.insertedId) {
                     toast.success("User registered successfully!");
+                    reset();
                   }
                 });
                 // user post request end
