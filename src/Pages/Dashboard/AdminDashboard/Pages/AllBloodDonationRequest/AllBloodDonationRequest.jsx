@@ -13,6 +13,7 @@ import { Link } from "react-router";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import Loader from "../../../../../Components/Shared/Loader";
+import { toast } from "react-toastify";
 
 const AllBloodDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
@@ -94,6 +95,23 @@ const AllBloodDonationRequest = () => {
       }
     });
   };
+
+  // working with mark done and cancel button star here
+  const handleDoneAndCancel = async (id, status) => {
+    if (status?.donation_status) {
+      try {
+        const res = await axiosSecure.patch(`/mark-done-cancel/${id}`, status);
+        if (res?.data?.data?.modifiedCount > 0) {
+          refetch();
+          toast.success(`${res?.data?.message}`);
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+  // working with mark done and cancel button end here
 
   if (isLoading) {
     return <Loader />;
@@ -274,12 +292,26 @@ const AllBloodDonationRequest = () => {
                           {data?.donation_status === "inprogress" && (
                             <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
                               <div className="tooltip" data-tip="Mark Done">
-                                <button className="btn btn-square btn-sm btn-success text-white">
+                                <button
+                                  onClick={() =>
+                                    handleDoneAndCancel(data._id, {
+                                      donation_status: "done",
+                                    })
+                                  }
+                                  className="btn btn-square btn-sm btn-success text-white"
+                                >
                                   <FaCheck size={14} />
                                 </button>
                               </div>
                               <div className="tooltip" data-tip="Cancel">
-                                <button className="btn btn-square btn-sm btn-error text-white">
+                                <button
+                                  onClick={() =>
+                                    handleDoneAndCancel(data._id, {
+                                      donation_status: "cancel",
+                                    })
+                                  }
+                                  className="btn btn-square btn-sm btn-error text-white"
+                                >
                                   <FaTimes size={14} />
                                 </button>
                               </div>
