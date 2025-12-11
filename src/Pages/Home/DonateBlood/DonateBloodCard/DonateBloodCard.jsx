@@ -10,8 +10,10 @@ import {
 import Container from "../../../../Components/Container/Container";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
+import useAuth from "../../../../hooks/useAuth";
 
 const DonateBloodCard = ({ detailsData, refetch }) => {
+  const { user } = useAuth();
   const {
     donation_date,
     donation_status,
@@ -31,8 +33,18 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
   const axiosSecure = useAxiosSecure();
 
   const handleChangeStatus = async (id) => {
+    const bloodDonorInfo = {
+      bloodDonorName: user?.displayName,
+      bloodDonorEmail: user?.email,
+    };
+
+    console.log(bloodDonorInfo);
+
     try {
-      const res = await axiosSecure.patch(`/update-donation-status/${id}`);
+      const res = await axiosSecure.patch(
+        `/update-donation-status/${id}`,
+        bloodDonorInfo
+      );
       if (res.data.modifiedCount > 0) {
         refetch();
         toast.success(`Donation Status Successfully Updated`);
@@ -63,8 +75,16 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
                 } badge-lg`}
               >
                 <h2 className="flex items-center">
-                  <span className="font-bold text-lg">Status :</span>{" "}
-                  {donation_status}
+                  <span className="font-bold text-lg">Status : </span>{" "}
+                  <span
+                    className={`font-medium ml-1 ${
+                      (donation_status === "cancel" && "text-red-500") ||
+                      (donation_status === "inprogress" && "text-white") ||
+                      (donation_status === "done" && "text-[#8B5CF6]")
+                    }`}
+                  >
+                    {donation_status}
+                  </span>
                 </h2>
               </div>
             </div>
@@ -146,7 +166,11 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
               <button
                 onClick={() => handleChangeStatus(_id)}
                 className="btn btn-primary text-black hover:text-white hover:bg-red-400"
-                disabled={donation_status === "inprogress" && true}
+                disabled={
+                  donation_status === "inprogress" ||
+                  donation_status === "done" ||
+                  (donation_status === "cancel" && true)
+                }
               >
                 DONATE BlOOD
               </button>

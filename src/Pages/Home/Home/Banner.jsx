@@ -83,7 +83,7 @@ const Banner = () => {
                           ? `Welcome ${user?.displayName}`
                           : "Join as a Donor"}
                       </button>
-                      {/* Search Button */}
+                      {/* Search Button */} 
                       <Link
                         to={"/search-page"}
                         className="flex items-center gap-2 rounded-full border-2 border-white px-6 py-3 text-sm sm:text-lg font-semibold transition duration-300 hover:bg-white hover:text-red-600"

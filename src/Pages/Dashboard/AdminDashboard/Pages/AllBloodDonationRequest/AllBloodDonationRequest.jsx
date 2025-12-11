@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 
 const AllBloodDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
-
   const { user } = useAuth();
 
   const { data: donationReqData = [], refetch } = useQuery({
@@ -181,7 +180,9 @@ const AllBloodDonationRequest = () => {
             <thead className="bg-gray-100 text-gray-600 uppercase text-xs font-bold tracking-wider">
               <tr>
                 <th className="py-4 pl-6">#</th>
-                <th>Recipient Info</th>
+                <th>Recipient Name</th>
+                <th>Donar Name</th>
+                <th>Donor Email</th>
                 <th>Location</th>
                 <th>Donation Date & Time</th>
                 <th>Blood Group</th>
@@ -201,6 +202,32 @@ const AllBloodDonationRequest = () => {
                   <td>
                     <div className="font-bold text-gray-800">
                       {data?.recipient_name}
+                    </div>
+                  </td>
+
+                  {/* Donor Name */}
+                  <td>
+                    <div className="text-gray-800">
+                      {data?.blood_donor_name ? (
+                        data.blood_donor_name
+                      ) : (
+                        <span className="text-red-400 font-normal">
+                          Processing...
+                        </span>
+                      )}
+                    </div>
+                  </td>
+
+                  {/* Donor email  */}
+                  <td>
+                    <div className="text-gray-800">
+                      {data?.blood_donor_email ? (
+                        data.blood_donor_email
+                      ) : (
+                        <span className="text-red-400 font-normal">
+                          Processing...
+                        </span>
+                      )}
                     </div>
                   </td>
 
@@ -251,7 +278,55 @@ const AllBloodDonationRequest = () => {
                   {/* Actions */}
 
                   {userData?.role === "volunteer" ? (
-                    ""
+                    <>
+                      {/* In Progress Specific Actions */}
+                      {
+                        <div className="flex gap-1 mt-3.5 ml-2 pl-2 border-l border-gray-300">
+                          <div className="tooltip" data-tip="Mark Done">
+                            <button
+                              onClick={() =>
+                                handleDoneAndCancel(data._id, {
+                                  donation_status: "done",
+                                })
+                              }
+                              disabled={
+                                data?.donation_status === "cancel" ||
+                                (data?.donation_status === "done" && true)
+                              }
+                              className={` ${
+                                data?.donation_status === "cancel" ||
+                                data?.donation_status === "done"
+                                  ? "btn  btn-sm cursor-not-allowed"
+                                  : "btn btn-square btn-sm btn-success text-white"
+                              }`}
+                            >
+                              <FaCheck size={14} />
+                            </button>
+                          </div>
+                          <div className="tooltip" data-tip="Cancel">
+                            <button
+                              onClick={() =>
+                                handleDoneAndCancel(data._id, {
+                                  donation_status: "cancel",
+                                })
+                              }
+                              disabled={
+                                data?.donation_status === "cancel" ||
+                                data?.donation_status === "done"
+                              }
+                              className={`${
+                                data?.donation_status === "cancel" ||
+                                data?.donation_status === "done"
+                                  ? "btn btn-sm cursor-not-allowed"
+                                  : "btn btn-square btn-sm btn-error text-white"
+                              }`}
+                            >
+                              <FaTimes size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      }
+                    </>
                   ) : (
                     <>
                       <td>

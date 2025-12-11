@@ -3,7 +3,6 @@ import Container from "../../../Components/Container/Container";
 import useLoadDistricts from "../../../hooks/useLoadDistricts";
 import useLoadUpazilas from "../../../hooks/useLoadUpazilas";
 import { FaSearch, FaTint } from "react-icons/fa";
-import useAuth from "../../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import DonorCard from "./DonorCard/DonorCard";
@@ -13,7 +12,6 @@ import Loader from "../../../Components/Shared/Loader";
 const SearchPage = () => {
   const [machDonor, setMachDonor] = useState([]);
   const [searched, setSearched] = useState(false);
-  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   // total users
   const { data: usersData = [], isLoading } = useQuery({
@@ -22,7 +20,6 @@ const SearchPage = () => {
       const res = await axiosSecure.get(`/users`);
       return res?.data;
     },
-    enabled: !!user?.email,
   });
 
   const donorUsers = usersData.filter((userData) => userData.role === "donor");
