@@ -48,7 +48,7 @@ const AdminHome = ({ role }) => {
       <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
         <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-10 border-l-8 border-red-600 md:flex items-center justify-between">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 flex items-center gap-3">
+            <h2 className="text-xl md:text-4xl font-extrabold text-gray-800 flex items-center gap-3">
               <BiSolidDonateBlood className="text-red-600" />
               BloodLink – {role === "volunteer" ? <>Volunteer </> : <>Admin </>}
               Dashboard
