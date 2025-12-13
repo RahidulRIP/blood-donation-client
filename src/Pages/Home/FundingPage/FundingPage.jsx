@@ -33,10 +33,6 @@ const FundingPage = () => {
   } = useForm();
 
   const handleFundSubmit = async (data) => {
-    {
-      !user.email && <Loader />;
-    }
-
     Swal.fire({
       title: "Please confirm if you'd like to proceed!",
       text: "Your Contribution Creates Hope!",
@@ -55,7 +51,7 @@ const FundingPage = () => {
           name: data?.name,
           donor_email: user?.email,
         };
-        console.log(paymentInfo);
+        // console.log(paymentInfo);
         try {
           axiosSecure
             .post("/create-checkout-session", paymentInfo)
@@ -120,7 +116,7 @@ const FundingPage = () => {
                   </td>
                   <td>
                     <span className="badge badge-success badge-lg font-bold">
-                      {data?.amount} $
+                      {data?.amount / 100} $
                     </span>
                   </td>
                   <td className="font-medium text-gray-700">

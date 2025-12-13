@@ -51,8 +51,8 @@ const Form = ({ userData, districts, upazilas, refetch }) => {
         toast.success("Profile updated successfully!");
         refetch();
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -62,9 +62,9 @@ const Form = ({ userData, districts, upazilas, refetch }) => {
   return (
     <div>
       <div className="bg-gray-50 flex items-center justify-center p-4 sm:p-10 gap-6  border-b ">
-        <div className="flex items-center gap-4">
+        <div className="md:flex items-center gap-4">
           <FaUserCircle className="text-5xl text-blue-600" />
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+          <h2 className="md:text-3xl font-extrabold text-gray-900 tracking-tight">
             User Profile Details
           </h2>
         </div>
@@ -72,9 +72,9 @@ const Form = ({ userData, districts, upazilas, refetch }) => {
           {editProfile ? (
             <button
               onClick={handleEditProfile}
-              className={`flex items-center gap-2 px-6 py-2 rounded-full bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 shadow-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300`}
+              className={`flex items-center gap-2 px-4 py-1 md:px-6 md:py-2 rounded-full bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 shadow-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300`}
             >
-              <FaEdit className="text-lg" />
+              <FaEdit className="text-2xl md:text-lg" />
               Edit Profile
             </button>
           ) : (

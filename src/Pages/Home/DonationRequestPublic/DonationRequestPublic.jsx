@@ -17,7 +17,7 @@ const DonationRequestPublic = () => {
     (data) => data.donation_status === "pending"
   );
 
-  console.log(donationReqPendingData);
+  // console.log(donationReqPendingData);
   return (
     <div>
       <div>

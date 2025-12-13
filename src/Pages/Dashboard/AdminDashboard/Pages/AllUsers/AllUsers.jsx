@@ -82,7 +82,7 @@ const AllUsers = () => {
               <td>{user?.email}</td>
 
               <td
-                className={`${
+                className={` ${
                   user?.status === "active" ? "text-green-400" : "text-red-400"
                 }`}
               >
@@ -105,7 +105,7 @@ const AllUsers = () => {
                 </button>
               </td>
               <td
-                className={`${
+                className={` ${
                   user?.role === "donor"
                     ? "text-blue-500"
                     : `${

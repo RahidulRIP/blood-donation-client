@@ -11,8 +11,10 @@ import Container from "../../../../Components/Container/Container";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
 import useAuth from "../../../../hooks/useAuth";
+import { useState } from "react";
 
 const DonateBloodCard = ({ detailsData, refetch }) => {
+  const [isModalOpen, setIsModalOpen] = useState();
   const { user } = useAuth();
   const {
     donation_date,
@@ -33,12 +35,12 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
   const axiosSecure = useAxiosSecure();
 
   const handleChangeStatus = async (id) => {
+    setIsModalOpen(false);
+
     const bloodDonorInfo = {
       bloodDonorName: user?.displayName,
       bloodDonorEmail: user?.email,
     };
-
-    console.log(bloodDonorInfo);
 
     try {
       const res = await axiosSecure.patch(
@@ -53,6 +55,20 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
       console.log(error);
     }
   };
+
+  const handleDonateBloodButton = () => {
+    if (user?.email === user_email) {
+      return toast.error(
+        "You cannot perform actions on a request you created."
+      );
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
   return (
     <Container>
       <div className="bg-base-200">
@@ -163,21 +179,98 @@ const DonateBloodCard = ({ detailsData, refetch }) => {
 
                 <p className="text-gray-700 italic">"{request_message}"</p>
               </div>
-              <button
-                onClick={() => handleChangeStatus(_id)}
-                className="btn btn-primary text-black hover:text-white hover:bg-red-400"
-                disabled={
-                  donation_status === "inprogress" ||
-                  donation_status === "done" ||
-                  (donation_status === "cancel" && true)
-                }
-              >
-                DONATE BlOOD
-              </button>
+
+              {donation_status === "pending" ? (
+                <button
+                  onClick={handleDonateBloodButton}
+                  className="btn btn_primary text-black cursor-not-allowed"
+                >
+                  DONATE BlOOD
+                </button>
+              ) : (
+                <button className="btn  text-black text-lg cursor-not-allowed">
+                  DONATE BlOOD
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
+      {/* modal  */}
+      <section>
+        {isModalOpen && (
+          <div className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-2xl text-primary mb-4">
+                Make a Donation
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Your generosity helps us save lives. Payments are processed
+                securely.
+              </p>
+
+              <form>
+                {/* Donor Name */}
+                <div className="form-control w-full mb-4">
+                  <label className="label">
+                    <span className="label-text font-semibold">Your Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    defaultValue={user?.displayName}
+                    className="input input-bordered w-full"
+                    readOnly
+                  />
+                </div>
+
+                {/* Donor Email */}
+                <div className="form-control w-full mb-6">
+                  <label className="label">
+                    <span className="label-text font-semibold">Your Email</span>
+                  </label>
+                  <input
+                    type="email"
+                    defaultValue={user?.email}
+                    className="input input-bordered w-full"
+                    readOnly
+                  />
+                </div>
+
+                {/* Action Buttons */}
+                <div className="modal-action mt-4">
+                  {/* <button onClick={()=>handleChangeStatus(_id,)} type="submit" className="btn btn-primary text-black">
+                    Confirm Donation
+                  </button> */}
+                  <button
+                    onClick={() => handleChangeStatus(_id)}
+                    type="button"
+                    className="btn btn-primary text-black hover:text-white hover:bg-red-400"
+                    disabled={
+                      donation_status === "inprogress" ||
+                      donation_status === "done" ||
+                      (donation_status === "cancel" && true)
+                    }
+                  >
+                    Confirm Donation
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div
+              className="modal-backdrop"
+              onClick={() => setIsModalOpen(false)}
+            ></div>
+          </div>
+        )}
+      </section>
     </Container>
   );
 };

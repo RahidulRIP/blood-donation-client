@@ -4,6 +4,7 @@ import useAuth from "../../../../hooks/useAuth";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { FaUsers, FaHandHoldingUsd, FaFileAlt } from "react-icons/fa"; // Using FaUsers, FaHandHoldingUsd, FaFileAlt for relevance
 import { BiSolidDonateBlood } from "react-icons/bi"; // Using BiSolidDonateBlood
+import BarChart from "../../../../Components/Shared/BarChart";
 
 const AdminHome = ({ role }) => {
   const axiosSecure = useAxiosSecure();
@@ -122,6 +123,13 @@ const AdminHome = ({ role }) => {
               </p>
             </div>
           </div>
+        </div>
+        <div className="py-6 md:py-20 ">
+          <BarChart
+            totalUsers={usersData?.length || 0}
+            totalFundsRaised={totalAmount.toFixed(2)}
+            totalDonationRequests={totalDonationReqData?.length || 0}
+          />
         </div>
       </div>
     </Container>

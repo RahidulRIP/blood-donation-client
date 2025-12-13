@@ -18,6 +18,8 @@ import { toast } from "react-toastify";
 const AllBloodDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const [filteredData, setFilteredData] = useState([]);
+ 
 
   const { data: donationReqData = [], refetch } = useQuery({
     queryKey: ["donationReqData", user?.email],
@@ -27,7 +29,6 @@ const AllBloodDonationRequest = () => {
     },
   });
 
-  // single user start
   const { data: userData = {}, isLoading } = useQuery({
     queryKey: ["userData", user?.email],
     queryFn: async () => {
@@ -36,36 +37,30 @@ const AllBloodDonationRequest = () => {
     },
     enabled: !!user?.email,
   });
-  // single user end
 
-  //   fitter functionalities start
-  const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
     setFilteredData(donationReqData);
   }, [donationReqData]);
 
+  // sort start
   const handleStatusValue = (value) => {
     const filteredByStatus = donationReqData.filter((data) =>
       data.donation_status.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredData(filteredByStatus);
   };
-  //   fitter functionalities end
+  // sort end
 
-  //   ............................................
-
+  // pagination start here
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(donationReqData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(
     startIndex,
     startIndex + itemsPerPage
   );
-
-  //   ............................................
-
-  //   delete
+  // pagination end here
   const handleDeleteDonarReq = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -77,50 +72,36 @@ const AllBloodDonationRequest = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          axiosSecure.delete(`/create-donation-request/${id}`).then((res) => {
-            if (res?.data?.deletedCount) {
-              refetch();
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success",
-              });
-            }
-          });
-        } catch (error) {
-          console.log(error);
-        }
+        axiosSecure.delete(`/create-donation-request/${id}`).then((res) => {
+          if (res?.data?.deletedCount) {
+            refetch();
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          }
+        });
       }
     });
   };
 
-  // working with mark done and cancel button star here
   const handleDoneAndCancel = async (id, status) => {
-    if (status?.donation_status) {
-      try {
-        const res = await axiosSecure.patch(`/mark-done-cancel/${id}`, status);
-        if (res?.data?.data?.modifiedCount > 0) {
-          refetch();
-          toast.success(`${res?.data?.message}`);
-          return;
-        }
-      } catch (error) {
-        console.log(error);
+    try {
+      const res = await axiosSecure.patch(`/mark-done-cancel/${id}`, status);
+      if (res?.data?.data?.modifiedCount > 0) {
+        refetch();
+        toast.success(res?.data?.message);
       }
+    } catch (error) {
+      console.log(error);
     }
   };
-  // working with mark done and cancel button end here
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  if (isLoading) return <Loader />;
+
   return (
     <div>
-      {/*  */}
+      {/* Header */}
       <div className="md:flex items-center justify-between gap-5 md:mx-6 mb-6">
         <div className="mb-8 md:flex flex-col md:flex-row justify-between items-center gap-10 bg-white p-6 rounded-xl shadow-sm border-l-8 border-red-500">
-          <div className="">
+          <div>
             <h2 className="text-2xl md:text-3xl text-gray-800">
               Welcome,{" "}
               <span className="font-bold text-red-600">
@@ -129,8 +110,7 @@ const AllBloodDonationRequest = () => {
               !
             </h2>
             <p className="text-gray-500 mt-1 flex items-center gap-2">
-              <FaTint className="text-red-500" />
-              Requests Management Panel
+              <FaTint className="text-red-500" /> Requests Management Panel
             </p>
           </div>
           <div className="mt-4 md:mt-0">
@@ -144,16 +124,16 @@ const AllBloodDonationRequest = () => {
             </div>
           </div>
         </div>
-        {/* sort status  start*/}
+
+        {/* sort start here*/}
         <div className="form-control w-full max-w-xs">
           <h2 className="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
             <FaFilter className="text-red-500" /> Sort By Status
           </h2>
-
           <select
             onChange={(e) => handleStatusValue(e.target.value)}
             defaultValue="Filter Options"
-            className="select select-bordered w-full bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500 appearance-none"
+            className="select select-bordered w-full bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500"
           >
             <option disabled={true}>Filter Options</option>
             <option value="pending" className="text-blue-600 font-medium">
@@ -165,18 +145,18 @@ const AllBloodDonationRequest = () => {
             <option value="done" className="text-green-600 font-medium">
               Done
             </option>
-            <option value="canceled" className="text-red-600 font-medium">
-              Canceled
+            <option value="cancel" className="text-red-600 font-medium">
+              Cancel
             </option>
           </select>
         </div>
-        {/* sort status  end*/}
+        {/* sort end here now looking admin*/}
       </div>
 
+      {/* Table */}
       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-        <div className=" overflow-x-auto">
+        <div className="overflow-x-auto">
           <table className="table w-full">
-            {/* head */}
             <thead className="bg-gray-100 text-gray-600 uppercase text-xs font-bold tracking-wider">
               <tr>
                 <th className="py-4 pl-6">#</th>
@@ -197,70 +177,42 @@ const AllBloodDonationRequest = () => {
                   className="hover:bg-red-50 transition-colors duration-200"
                 >
                   <th className="pl-6 text-gray-400">{i + 1}</th>
-
-                  {/* Recipient Name */}
-                  <td>
-                    <div className="font-bold text-gray-800">
-                      {data?.recipient_name}
-                    </div>
+                  <td className="font-bold text-gray-800">
+                    {data?.recipient_name}
                   </td>
-
-                  {/* Donor Name */}
-                  <td>
-                    <div className="text-gray-800">
-                      {data?.blood_donor_name ? (
-                        data.blood_donor_name
-                      ) : (
-                        <span className="text-red-400 font-normal">
-                          Processing...
-                        </span>
-                      )}
-                    </div>
-                  </td>
-
-                  {/* Donor email  */}
-                  <td>
-                    <div className="text-gray-800">
-                      {data?.blood_donor_email ? (
-                        data.blood_donor_email
-                      ) : (
-                        <span className="text-red-400 font-normal">
-                          Processing...
-                        </span>
-                      )}
-                    </div>
-                  </td>
-
-                  {/* Location */}
-                  <td>
-                    <div className="flex items-center gap-1 text-sm text-gray-600">
-                      <FaMapMarkerAlt className="text-gray-400" />
-                      <span>
-                        {data?.recipient_upazila}, {data?.recipient_district}
+                  <td className="text-gray-800">
+                    {data?.blood_donor_name || (
+                      <span className="text-red-400 font-normal">
+                        Processing...
                       </span>
+                    )}
+                  </td>
+                  <td className="text-gray-800">
+                    {data?.blood_donor_email || (
+                      <span className="text-red-400 font-normal">
+                        Processing...
+                      </span>
+                    )}
+                  </td>
+                  <td className="flex items-center gap-1 text-sm text-gray-600">
+                    <FaMapMarkerAlt className="text-gray-400" />
+                    <span>
+                      {data?.recipient_upazila}, {data?.recipient_district}
+                    </span>
+                  </td>
+                  <td className="text-sm">
+                    <div className="font-medium text-gray-800">
+                      {data?.donation_date}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {data?.donation_time}
                     </div>
                   </td>
-
-                  {/* Date & Time */}
-                  <td>
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-800">
-                        {data?.donation_date}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {data?.donation_time}
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Blood Group */}
                   <td>
                     <div className="badge badge-error badge-outline font-bold">
                       {data?.recipient_blood_group}
                     </div>
                   </td>
-
-                  {/* Status */}
                   <td>
                     <div
                       className={`badge font-medium ${
@@ -275,135 +227,118 @@ const AllBloodDonationRequest = () => {
                     </div>
                   </td>
 
-                  {/* Actions */}
+                  {/* Actions  admin + volunteer*/}
+                  <td className="flex items-center justify-center gap-2">
+                    {(userData?.role === "volunteer" ||
+                      userData?.role === "admin") && (
+                      <>
+                        <button
+                          onClick={() =>
+                            handleDoneAndCancel(data._id, {
+                              donation_status: "done",
+                            })
+                          }
+                          disabled={
+                            data.donation_status === "cancel" ||
+                            data.donation_status === "done"
+                          }
+                          className={`btn btn-square btn-sm btn-success text-white ${
+                            data.donation_status === "cancel" ||
+                            data.donation_status === "done"
+                              ? "cursor-not-allowed"
+                              : ""
+                          }`}
+                          title="Mark Done"
+                        >
+                          <FaCheck size={14} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleDoneAndCancel(data._id, {
+                              donation_status: "cancel",
+                            })
+                          }
+                          disabled={
+                            data.donation_status === "cancel" ||
+                            data.donation_status === "done"
+                          }
+                          className={`btn btn-square btn-sm btn-error text-white ${
+                            data.donation_status === "cancel" ||
+                            data.donation_status === "done"
+                              ? "cursor-not-allowed"
+                              : ""
+                          }`}
+                          title="Cancel"
+                        >
+                          <FaTimes size={14} />
+                        </button>
+                      </>
+                    )}
 
-                  {userData?.role === "volunteer" ? (
-                    <>
-                      {/* In Progress Specific Actions */}
-                      {
-                        <div className="flex gap-1 mt-3.5 ml-2 pl-2 border-l border-gray-300">
-                          <div className="tooltip" data-tip="Mark Done">
+                    {/* only for admin  */}
+                    {userData?.role === "admin" && (
+                      <>
+                        <Link
+                          to={`/dashboard/updateDonarReqData/${data._id}`}
+                          className="btn btn-square btn-sm btn-ghost text-blue-600 hover:bg-blue-100"
+                          title="Edit"
+                        >
+                          <FaEdit size={16} />
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteDonarReq(data._id)}
+                          className="btn btn-square btn-sm btn-ghost text-red-600 hover:bg-red-100"
+                          title="Delete"
+                        >
+                          <FaTrashAlt size={16} />
+                        </button>
+                        <Link
+                          to={`/dashboard/detailsDonarReqData/${data._id}`}
+                          className="btn btn-square btn-sm btn-ghost text-gray-600 hover:bg-gray-200"
+                          title="View Details"
+                        >
+                          <FaEye size={16} />
+                        </Link>
+
+                        {/* this is extra still now (later find out for sure) */}
+                        {/* {data.donation_status === "inprogress" && (
+                          <>
                             <button
                               onClick={() =>
                                 handleDoneAndCancel(data._id, {
                                   donation_status: "done",
                                 })
                               }
-                              disabled={
-                                data?.donation_status === "cancel" ||
-                                (data?.donation_status === "done" && true)
-                              }
-                              className={` ${
-                                data?.donation_status === "cancel" ||
-                                data?.donation_status === "done"
-                                  ? "btn  btn-sm cursor-not-allowed"
-                                  : "btn btn-square btn-sm btn-success text-white"
-                              }`}
+                              className="btn btn-square btn-sm btn-success text-white"
+                              title="Mark Done"
                             >
                               <FaCheck size={14} />
                             </button>
-                          </div>
-                          <div className="tooltip" data-tip="Cancel">
                             <button
                               onClick={() =>
                                 handleDoneAndCancel(data._id, {
                                   donation_status: "cancel",
                                 })
                               }
-                              disabled={
-                                data?.donation_status === "cancel" ||
-                                data?.donation_status === "done"
-                              }
-                              className={`${
-                                data?.donation_status === "cancel" ||
-                                data?.donation_status === "done"
-                                  ? "btn btn-sm cursor-not-allowed"
-                                  : "btn btn-square btn-sm btn-error text-white"
-                              }`}
+                              className="btn btn-square btn-sm btn-error text-white"
+                              title="Cancel"
                             >
                               <FaTimes size={14} />
                             </button>
-                          </div>
-                        </div>
-                      }
-                    </>
-                  ) : (
-                    <>
-                      <td>
-                        <div className="flex items-center justify-center gap-2">
-                          {/* Edit */}
-                          <div className="tooltip" data-tip="Edit">
-                            <Link
-                              to={`/dashboard/updateDonarReqData/${data._id}`}
-                              className="btn btn-square btn-sm btn-ghost text-blue-600 hover:bg-blue-100"
-                            >
-                              <FaEdit size={16} />
-                            </Link>
-                          </div>
-
-                          {/* Delete */}
-                          <div className="tooltip" data-tip="Delete">
-                            <button
-                              onClick={() =>
-                                handleDeleteDonarReq(`${data._id}`)
-                              }
-                              className="btn btn-square btn-sm btn-ghost text-red-600 hover:bg-red-100"
-                            >
-                              <FaTrashAlt size={16} />
-                            </button>
-                          </div>
-
-                          {/* View Details */}
-                          <div className="tooltip" data-tip="View Details">
-                            <Link
-                              to={`/dashboard/detailsDonarReqData/${data._id}`}
-                              className="btn btn-square btn-sm btn-ghost text-gray-600 hover:bg-gray-200"
-                            >
-                              <FaEye size={16} />
-                            </Link>
-                          </div>
-
-                          {/* In Progress Specific Actions */}
-                          {data?.donation_status === "inprogress" && (
-                            <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
-                              <div className="tooltip" data-tip="Mark Done">
-                                <button
-                                  onClick={() =>
-                                    handleDoneAndCancel(data._id, {
-                                      donation_status: "done",
-                                    })
-                                  }
-                                  className="btn btn-square btn-sm btn-success text-white"
-                                >
-                                  <FaCheck size={14} />
-                                </button>
-                              </div>
-                              <div className="tooltip" data-tip="Cancel">
-                                <button
-                                  onClick={() =>
-                                    handleDoneAndCancel(data._id, {
-                                      donation_status: "cancel",
-                                    })
-                                  }
-                                  className="btn btn-square btn-sm btn-error text-white"
-                                >
-                                  <FaTimes size={14} />
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                    </>
-                  )}
+                          </>
+                        )} */}
+                      </>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-      {/* ..................... */}
-      <div className="flex justify-center mt-5 ">
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-5">
         <div className="join">
           <button
             className="join-item btn"
@@ -412,7 +347,6 @@ const AllBloodDonationRequest = () => {
           >
             Prev
           </button>
-
           {[...Array(totalPages).keys()].map((page) => (
             <button
               key={page}
@@ -424,7 +358,6 @@ const AllBloodDonationRequest = () => {
               {page + 1}
             </button>
           ))}
-
           <button
             className="join-item btn"
             disabled={currentPage === totalPages}
@@ -434,7 +367,6 @@ const AllBloodDonationRequest = () => {
           </button>
         </div>
       </div>
-      {/* .................... */}
     </div>
   );
 };

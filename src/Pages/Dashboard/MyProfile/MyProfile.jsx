@@ -5,6 +5,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Form from "../../../Components/Dashboard/Form";
 import useLoadDistricts from "../../../hooks/useLoadDistricts";
 import useLoadUpazilas from "../../../hooks/useLoadUpazilas";
+import { FaEnvelope, FaUser } from "react-icons/fa6";
 
 const MyProfile = () => {
   const districts = useLoadDistricts();
@@ -36,13 +37,24 @@ const MyProfile = () => {
                 alt=""
               />
             </div>
-            <div className="">
-              <div className="text-center">
-                <h2 className="text-lg ">
-                  <span className="font-medium">Name:</span> {userData?.name}
+            <div>
+              <div className="text-center p-4">
+                <h2 className="text-lg mb-1 text-gray-800">
+                  <span className="font-medium mr-1 text-gray-600">
+                    <FaUser className="inline w-4 h-4 mr-1 text-blue-500" />
+                    Name:
+                  </span>
+
+                  <span className="font-semibold">{userData?.name}</span>
                 </h2>
-                <h2 className="text-lg">
-                  <span className="font-medium">Email:</span> {user?.email}
+
+                <h2 className="text-lg text-gray-800">
+                  <span className="font-medium mr-1 text-gray-600">
+                    <FaEnvelope className="inline w-4 h-4 mr-1 text-green-500" />
+                    Email:
+                  </span>
+
+                  <span className="font-semibold">{user?.email}</span>
                 </h2>
               </div>
               <Form

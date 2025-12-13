@@ -13,11 +13,17 @@ import {
   FaTint,
   FaMapMarkerAlt,
 } from "react-icons/fa";
+import Loader from "../../../../Components/Shared/Loader";
+import { toast } from "react-toastify";
 
 const DonarHome = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
-  const { data: donationReqData = [], refetch } = useQuery({
+  const {
+    data: donationReqData = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["donationReqData", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -56,6 +62,21 @@ const DonarHome = () => {
     });
   };
 
+  const handleDoneAndCancel = async (id, status) => {
+    try {
+      const res = await axiosSecure.patch(`/mark-done-cancel/${id}`, status);
+      if (res?.data?.data?.modifiedCount > 0) {
+        refetch();
+        toast.success(res?.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <div className="p-4 md:p-8 bg-gray-50 min-h-screen font-sans">
       {donationReqData.length ? (
@@ -94,11 +115,13 @@ const DonarHome = () => {
                 <thead className="bg-gray-100 text-gray-600 uppercase text-xs font-bold tracking-wider">
                   <tr>
                     <th className="py-4 pl-6">#</th>
-                    <th>Recipient Info</th>
+                    <th>Recipient Name</th>
+                    <th>Donor Name</th>
+                    <th>Donor email</th>
                     <th>Location</th>
                     <th>Date & Time</th>
                     <th>Blood Group</th>
-                    <th>Status</th>
+                    <th>Donation Status</th>
                     <th className="text-center">Actions</th>
                   </tr>
                 </thead>
@@ -110,10 +133,40 @@ const DonarHome = () => {
                     >
                       <th className="pl-6 text-gray-400">{i + 1}</th>
 
-                      {/* Recipient Name */}
+                      {/* recipient Name */}
                       <td>
                         <div className="font-bold text-gray-800">
                           {data?.recipient_name}
+                        </div>
+                      </td>
+
+                      {/* Donor name */}
+                      <td>
+                        <div className="font-bold text-gray-800">
+                          {data?.donation_status === "inprogress" ? (
+                            <>{data?.blood_donor_name}</>
+                          ) : (
+                            <>
+                              <p className="text-warning font-normal">
+                                Processing..
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Donor Email */}
+                      <td>
+                        <div className="font-bold text-gray-800">
+                          {data?.donation_status === "inprogress" ? (
+                            <>{data?.blood_donor_email}</>
+                          ) : (
+                            <>
+                              <p className="text-warning font-normal">
+                                Processing..
+                              </p>
+                            </>
+                          )}
                         </div>
                       </td>
 
@@ -199,19 +252,31 @@ const DonarHome = () => {
                           </div>
 
                           {/* In Progress Specific Actions */}
-                          {data?.donation_status === "inprogress" && (
-                            <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
-                              <div className="tooltip" data-tip="Mark Done">
-                                <button className="btn btn-square btn-sm btn-success text-white">
-                                  <FaCheck size={14} />
-                                </button>
-                              </div>
-                              <div className="tooltip" data-tip="Cancel">
-                                <button className="btn btn-square btn-sm btn-error text-white">
-                                  <FaTimes size={14} />
-                                </button>
-                              </div>
-                            </div>
+                          {data.donation_status === "inprogress" && (
+                            <>
+                              <button
+                                onClick={() =>
+                                  handleDoneAndCancel(data._id, {
+                                    donation_status: "done",
+                                  })
+                                }
+                                className="btn btn-square btn-sm btn-success text-white"
+                                title="Mark Done"
+                              >
+                                <FaCheck size={14} />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleDoneAndCancel(data._id, {
+                                    donation_status: "cancel",
+                                  })
+                                }
+                                className="btn btn-square btn-sm btn-error text-white"
+                                title="Cancel"
+                              >
+                                <FaTimes size={14} />
+                              </button>
+                            </>
                           )}
                         </div>
                       </td>

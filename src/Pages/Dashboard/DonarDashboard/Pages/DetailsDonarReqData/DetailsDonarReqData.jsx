@@ -11,18 +11,17 @@ import {
 } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
+import Loader from "../../../../../Components/Shared/Loader";
 
 const DetailsDonarReqData = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data: detailsData = [] } = useQuery({
+  const { data: detailsData = [], isLoading } = useQuery({
     queryKey: ["donarReqSingleData", id],
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `http://localhost:9000/create-donation-request/${id}`
-      );
+      const res = await axiosSecure.get(`/create-donation-request/${id}`);
       return res?.data;
     },
   });
@@ -42,6 +41,9 @@ const DetailsDonarReqData = () => {
     user_name,
   } = detailsData;
 
+  if (isLoading) {
+    return <Loader />;  
+  }
   return (
     <div className="min-h-screen bg-base-200 p-4 lg:p-10">
       <div className="max-w-4xl mx-auto">

@@ -22,10 +22,12 @@ const Footer = () => {
 
             {/* Social Icons */}
             <div className="flex gap-5 mt-6 md:mt-0">
-              <FaGithub
-                size={26}
-                className="cursor-pointer hover:text-white transition-all duration-200 hover:scale-110"
-              />
+              <a href="https://github.com/RahidulRIP" target="_blank">
+                <FaGithub
+                  size={26}
+                  className="cursor-pointer hover:text-white transition-all duration-200 hover:scale-110"
+                />
+              </a>
               <FaXTwitter
                 size={26}
                 className="cursor-pointer hover:text-white transition-all duration-200 hover:scale-110"
@@ -50,9 +52,10 @@ const Footer = () => {
               <div className="flex flex-col gap-1 text-gray-400">
                 <a className="hover:text-white transition">Find a Donor</a>
                 <a className="hover:text-white transition">Request Blood</a>
-                <a className="hover:text-white transition">Donor Registration</a>
+                <a className="hover:text-white transition">
+                  Donor Registration
+                </a>
                 <a className="hover:text-white transition">LifeStream</a>
-                
               </div>
             </div>
 

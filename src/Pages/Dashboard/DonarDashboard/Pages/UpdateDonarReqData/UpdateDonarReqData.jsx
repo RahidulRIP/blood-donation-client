@@ -19,12 +19,10 @@ const UpdateDonarReqData = () => {
   const axiosSecure = useAxiosSecure();
   const { id } = useParams();
   // console.log(id);
-  const { data: donarReqSingleData = [] } = useQuery({
+  const { data: donarReqSingleData = [], refetch } = useQuery({
     queryKey: ["donarReqSingleData", id],
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `http://localhost:9000/create-donation-request/${id}`
-      );
+      const res = await axiosSecure.get(`/create-donation-request/${id}`);
       return res?.data;
     },
   });
@@ -74,6 +72,7 @@ const UpdateDonarReqData = () => {
 
       if (res?.data?.modifiedCount > 0) {
         toast.success("Data Update successful!");
+        refetch();
       }
     } catch (error) {
       setError(error);
@@ -359,7 +358,10 @@ const UpdateDonarReqData = () => {
               </div>
               {/* error  */}
               {error && <h2 className="text-red-600">{error}</h2>}
-              <button type="submit" className="btn_primary">
+              <button
+                type="submit"
+                className="btn btn-primary w-full text-black"
+              >
                 Update
               </button>
             </form>

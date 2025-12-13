@@ -14,7 +14,7 @@ const SearchPage = () => {
   const [searched, setSearched] = useState(false);
   const axiosSecure = useAxiosSecure();
   // total users
-  const { data: usersData = [], isLoading } = useQuery({
+  const { data: usersData = [],isLoading } = useQuery({
     queryKey: ["usersData"],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users`);
@@ -61,9 +61,8 @@ const SearchPage = () => {
     setMachDonor(filteredUsers);
     setSearched(true);
   };
-
-  if (isLoading) {
-    return <Loader />;
+  if(isLoading){
+    return <Loader/>
   }
   return (
     <Container>

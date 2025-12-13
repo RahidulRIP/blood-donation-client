@@ -1,6 +1,5 @@
 import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FiImage, FiLock, FiMail, FiUser } from "react-icons/fi";
 import { useForm, useWatch } from "react-hook-form";
@@ -10,22 +9,23 @@ import { toast } from "react-toastify";
 import Loader from "../../../Components/Shared/Loader";
 import useLoadDistricts from "../../../hooks/useLoadDistricts";
 import useLoadUpazilas from "../../../hooks/useLoadUpazilas";
+import useAxios from "../../../hooks/useAxios";
 
 const Register = () => {
   const districts = useLoadDistricts();
   const upazilas = useLoadUpazilas();
+  const location = useLocation();
 
   const { createUser, updateUserProfile } = useAuth();
 
   const [eyes, setEyes] = useState(false);
   const [error, setError] = useState("");
 
-  const axiosSecure = useAxiosSecure();
+  const axiosInstance = useAxios();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     control,
   } = useForm();
 
@@ -45,76 +45,53 @@ const Register = () => {
   };
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   const handleRegister = async (data) => {
-    // register a user
+    // new code start
     if (!data) {
       return <Loader />;
     }
-
     if (data?.password !== data?.confirm_password) {
-      toast.error("Must be Same Password");
+      toast.error("Please make sure the passwords match!");
       return;
     }
+    try {
+      const file = data.photo[0];
+      const formData = new FormData();
+      formData.append("image", file);
+      const apiKey = import.meta.env.VITE_ImgBB_api;
+      const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
+      // post image to imgBB
+      const image = await axiosInstance.post(url, formData);
+      const imgURL = image?.data?.data?.display_url;
+      const profile = {
+        displayName: data?.name,
+        photoURL: imgURL,
+      };
 
-    createUser(data?.email, data?.password)
-      .then(() => {
-        // console.log(result.user);
+      // signup user
+      await createUser(data?.email, data?.password);
+      // update user profile
+      await updateUserProfile(profile);
 
-        // upload photo using api in imgBB start
-        const file = data.photo[0];
-        const formData = new FormData();
-        formData.append("image", file);
-        const apiKey = import.meta.env.VITE_ImgBB_api;
-        const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
-        try {
-          axiosSecure.post(url, formData).then((res) => {
-            const imgURL = res?.data?.data?.display_url;
-            const profile = {
-              displayName: data?.name,
-              photoURL: imgURL,
-            };
+      const userInfo = {
+        name: data?.name,
+        email: data?.email,
+        photoURL: imgURL,
+        blood_group: data?.blood_group,
+        district: data?.district,
+        upazila: data?.upazila,
+      };
+      await axiosInstance.post("/users", userInfo);
+      toast.success("User registered successfully!");
 
-            // update user profile
-            updateUserProfile(profile)
-              .then(() => {
-                // console.log(result);
-
-                // user post request start
-                const userInfo = {
-                  name: data?.name,
-                  email: data?.email,
-                  photoURL: imgURL,
-                  blood_group: data?.blood_group,
-                  district: data?.district,
-                  upazila: data?.upazila,
-                  role: data?.role,
-                };
-
-                axiosSecure.post("/users", userInfo).then((res) => {
-                  if (res?.data?.insertedId) {
-                    toast.success("User registered successfully!");
-                    reset();
-                  }
-                });
-                // user post request end
-                navigate(location?.state || "/");
-              })
-              .catch((err) => {
-                setError(err.message);
-              });
-          });
-        } catch (err) {
-          console.log(err);
-        }
-        // upload photo using api in imgBB end
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+      navigate(location?.state || "/");
+    } catch (err) {
+      setError(err.message);
+      toast.error(err.message || "Registration failed!");
+    }
   };
   return (
     <Container>

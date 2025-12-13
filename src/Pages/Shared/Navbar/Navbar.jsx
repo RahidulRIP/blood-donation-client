@@ -4,6 +4,7 @@ import { TfiMenuAlt } from "react-icons/tfi";
 import useAuth from "../../../hooks/useAuth";
 import { Link, NavLink } from "react-router";
 import Logo from "../../../Components/Shared/Logo";
+import { CgProfile } from "react-icons/cg";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,7 +58,7 @@ const Navbar = () => {
     <div
       className={`w-full z-50 transition-all ease-in-out duration-300 ${
         isScrolled
-          ? "bg-black/10 backdrop-blur-md  text-white fixed top-0 left-0 "
+          ? "bg-black/10 backdrop-blur-md  text-orange-400 fixed top-0 left-0 "
           : "bg-gray-400 "
       }`}
     >
@@ -74,7 +75,7 @@ const Navbar = () => {
               </div>
               <ul
                 tabIndex="-1"
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-2xs p-2 shadow  font-medium"
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-[200px] p-2 shadow space-y-1 font-medium"
               >
                 {links}
               </ul>
@@ -86,7 +87,7 @@ const Navbar = () => {
           </div>
           <div className="navbar-center hidden lg:flex ">
             <ul
-              className={`menu menu-horizontal px-1 font-medium ${
+              className={`menu menu-horizontal px-1 font-medium space-x-2.5${
                 isScrolled ? "text-orange-500" : ""
               }`}
             >
@@ -108,17 +109,20 @@ const Navbar = () => {
               </>
             )}
 
-            {user && (
+            {user?.email && (
               <div className="relative">
                 <div
                   onClick={() => setClickProfile(!clickProfile)}
                   className="w-11 h-11 rounded-full border-2 border-primary cursor-pointer overflow-hidden hover:scale-105 transition-transform"
                 >
-                  <img
-                    src={user?.photoURL}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
+                  {user?.photoURL && (
+                    <img
+                      src={user?.photoURL}
+                      alt="Profile"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                 </div>
 
                 {user && clickProfile && (

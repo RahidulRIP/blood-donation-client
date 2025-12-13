@@ -2,21 +2,29 @@ import { useState } from "react";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import { useForm, useWatch } from "react-hook-form";
 import { FiMail, FiUser } from "react-icons/fi";
-import { FaCalendarAlt, FaMapMarkerAlt, FaRegFileAlt } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaRegFileAlt,
+  FaTint,
+} from "react-icons/fa";
 import Container from "../../../../../Components/Container/Container";
 import { FaClock, FaHospital } from "react-icons/fa6";
 import useAuth from "../../../../../hooks/useAuth";
 import { toast } from "react-toastify";
 import useLoadDistricts from "../../../../../hooks/useLoadDistricts";
 import useLoadUpazilas from "../../../../../hooks/useLoadUpazilas";
+import { MdOutlineNotificationImportant } from "react-icons/md";
+import { useNavigate } from "react-router";
 
 const CreateDonationRequest = () => {
   const districts = useLoadDistricts();
   const upazilas = useLoadUpazilas();
+  const navigate = useNavigate();
 
   const [error, setError] = useState("");
   const axiosSecure = useAxiosSecure();
-  // const { upazilas } = useLoaderData();
+
   const { user } = useAuth();
   const {
     register,
@@ -54,6 +62,7 @@ const CreateDonationRequest = () => {
       if (res?.data?.insertedId) {
         toast.success("Donation request created successfully.");
         reset();
+        navigate("/dashboard");
       }
       if (res?.data?.message) {
         toast.error(`${res?.data?.message}`);
@@ -65,16 +74,18 @@ const CreateDonationRequest = () => {
   return (
     <Container>
       <div className="flex items-center justify-center my-12 md:my-16 p-3.5">
-        <div className="w-full  p-8 space-y-6 bg-white rounded-lg shadow-xl shadow-top">
-          <h2 className="text-2xl font-bold text-center text-gray-800">
-            Your Small Contribution Can Save Someone’s Life
-          </h2>
+        <div className="w-full  md:p-8 space-y-6 bg-white rounded-lg shadow-xl shadow-top">
+          <div className="flex items-center gap-3 bg-red-100 text-red-700 px-6 py-4 rounded-lg shadow-md border border-red-300">
+            <MdOutlineNotificationImportant className="text-2xl animate-pulse" />
+            <FaTint className="text-2xl" />
+            <h1 className="md:text-xl font-bold">Emergency Blood Request</h1>
+          </div>
           {user?.email && (
             <form
               onSubmit={handleSubmit(handleDonationRequest)}
               className="space-y-4"
             >
-              <section className="md:flex gap-28">
+              <section className="md:flex gap-28 p-2.5">
                 <section className="flex-1 space-y-6">
                   {/* name  */}
                   <div>
@@ -318,7 +329,7 @@ const CreateDonationRequest = () => {
               </section>
 
               {/* request message */}
-              <div>
+              <div className="p-2.5">
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Request Message
                 </label>

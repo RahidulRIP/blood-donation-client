@@ -22,12 +22,14 @@ import DonateBlood from "../Pages/Home/DonateBlood/DonateBlood";
 import FundingPage from "../Pages/Home/FundingPage/FundingPage";
 import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancelled";
+import RoutesErrorPage from "./RoutesErrorPage";
+import PrivateRouteAdmin from "./PrivateRouteAdmin";
+import AdminVolunteerPrivate from "./adminVolunteerPrivate";
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
-    HydrateFallback: Loader,
     children: [
       {
         index: true,
@@ -69,11 +71,7 @@ const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: (
-      <PrivateRoute>
-        <DashboardLayout />
-      </PrivateRoute>
-    ),
+    element: <DashboardLayout />,
     HydrateFallback: Loader,
     children: [
       // donar dashboard start
@@ -111,18 +109,33 @@ const router = createBrowserRouter([
       },
       {
         path: "all-users",
-        Component: AllUsers,
+        element: (
+          <PrivateRouteAdmin>
+            <AllUsers />
+          </PrivateRouteAdmin>
+        ),
       },
       {
         path: "all-blood-donation-request",
-        Component: AllBloodDonationRequest,
+        // this use in admin and volunteer i think
+        // Component: AllBloodDonationRequest,
+        element: (
+          <AdminVolunteerPrivate>
+            <AllBloodDonationRequest />
+          </AdminVolunteerPrivate>
+        ),
       },
       // admin dashboard end
 
       // volunteer dashboard stat
       {
         index: true,
-        Component: VolunteerHome,
+        // Component: VolunteerHome,
+        element: (
+          <AdminVolunteerPrivate>
+            <VolunteerHome />
+          </AdminVolunteerPrivate>
+        ),
       },
       // volunteer dashboard end
 
@@ -137,6 +150,10 @@ const router = createBrowserRouter([
       },
       // payment component end
     ],
+  },
+  {
+    path: "*",
+    Component: RoutesErrorPage,
   },
 ]);
 

@@ -36,23 +36,29 @@ const MyDonationRequests = () => {
     setFilteredData(donationReqData);
   }, [donationReqData]);
 
+  // sort start
   const handleStatusValue = (value) => {
     const filteredByStatus = donationReqData.filter((data) =>
       data.donation_status.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredData(filteredByStatus);
   };
-
+  // sort end
   //   ............................................
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
-  const totalPages = Math.ceil(donationReqData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage); //edit here donationReqData.length
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(
     startIndex,
     startIndex + itemsPerPage
   );
+
+  //page reset(sort)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredData]);
 
   //   ............................................
 
@@ -136,7 +142,7 @@ const MyDonationRequests = () => {
             <option value="done" className="text-green-600 font-medium">
               Done
             </option>
-            <option value="canceled" className="text-red-600 font-medium">
+            <option value="cancel" className="text-red-600 font-medium">
               Canceled
             </option>
           </select>
@@ -160,13 +166,14 @@ const MyDonationRequests = () => {
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-200">
               {paginatedData.map((data, i) => (
                 <tr
                   key={data._id}
                   className="hover:bg-red-50 transition-colors duration-200"
                 >
-                  <th className="pl-6 text-gray-400">{i + 1}</th>
+                  <td className="pl-6 text-gray-400">{i + 1}</td>
 
                   {/* Recipient Name */}
                   <td>
@@ -253,7 +260,7 @@ const MyDonationRequests = () => {
                         </Link>
                       </div>
 
-                      {/*conditional Actions */}
+                      {/*conditional Actions (still no need of this later have to delete)*/}
                       {data?.donation_status === "inprogress" && (
                         <div className="flex gap-1 ml-2 pl-2 border-l border-gray-300">
                           <div className="tooltip" data-tip="Mark Done">

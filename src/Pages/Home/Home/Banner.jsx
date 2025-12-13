@@ -73,20 +73,30 @@ const Banner = () => {
 
                     <div className="flex items-center gap-4 pt-4 md:ml-20">
                       {/* join and welcome Button */}
-                      <button
+                      {/* <button
                         onClick={handleBannerJoinButton}
                         disabled={user?.email && true}
-                        className="flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm sm:text-lg font-bold shadow-lg transition duration-300 hover:bg-red-700"
+                        className="flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm sm:text-lg font-bold shadow-lg transition duration-300 hover:bg-red-700 w-fit"
                       >
                         <FaHeart size={20} />
                         {user?.email
-                          ? `Welcome ${user?.displayName}`
+                          ? `Welcome ${user?.displayName.split(" ")[0]}`
+                          : "Join as a Donor"}
+                      </button> */}
+                      <button
+                        onClick={handleBannerJoinButton}
+                        disabled={!!user?.email}
+                        className="flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm sm:text-lg font-bold shadow-lg transition duration-300 hover:bg-red-700 w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <FaHeart size={20} />
+                        {user?.email
+                          ? `Welcome ${user?.displayName?.split(" ")[0]}`
                           : "Join as a Donor"}
                       </button>
-                      {/* Search Button */} 
+                      {/* Search Button */}
                       <Link
                         to={"/search-page"}
-                        className="flex items-center gap-2 rounded-full border-2 border-white px-6 py-3 text-sm sm:text-lg font-semibold transition duration-300 hover:bg-white hover:text-red-600"
+                        className="flex items-center gap-2 rounded-full border-2 border-white px-6 py-3 text-sm sm:text-lg font-semibold transition duration-300 hover:bg-white hover:text-red-600 w-fit"
                       >
                         <FaSearch size={20} />
                         Search Donors

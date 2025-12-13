@@ -35,14 +35,13 @@ const DashboardLayout = () => {
               aria-label="open sidebar"
               className="btn btn-square btn-ghost"
             >
-              {/* Sidebar toggle icon */}
               <TbLayoutSidebarLeftExpandFilled size={16} />
             </label>
-            <Link to={'/'} className="px-4">
+            <Link to={"/"} className="px-4">
               <Logo />
             </Link>
           </nav>
-          <h1></h1>
+
           {/* Page content here */}
           <div className="p-4">
             <Outlet />
@@ -57,10 +56,10 @@ const DashboardLayout = () => {
           ></label>
           <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
             {/* Sidebar content here */}
-            <ul className="menu w-full grow">
+            <ul className="menu w-full grow space-y-2.5">
               {/*HOME*/}
               <li>
-                <Link
+                <NavLink
                   to={"/"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Homepage"
@@ -68,7 +67,7 @@ const DashboardLayout = () => {
                   {/* Home icon */}
                   <FaTint size={20} className=" animate-pulse text-red-600" />
                   <span className="is-drawer-close:hidden">Homepage</span>
-                </Link>
+                </NavLink>
               </li>
 
               {/* Profile*/}
@@ -76,11 +75,11 @@ const DashboardLayout = () => {
                 <NavLink
                   to={"/dashboard/profile"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="My-Profile"
+                  data-tip="Profile"
                 >
                   {/*icon */}
                   <ImProfile size={18} />
-                  <span className="is-drawer-close:hidden">My Profile</span>
+                  <span className="is-drawer-close:hidden">Profile</span>
                 </NavLink>
               </li>
 
@@ -91,18 +90,19 @@ const DashboardLayout = () => {
                     <NavLink
                       to={"/dashboard"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Donor-Home-Information"
+                      data-tip="Home-Information"
+                      end
                     >
                       {/*icon */}
                       <FaHome size={20} />
-                      <span className="is-drawer-close:hidden">Donar Home</span>
+                      <span className="is-drawer-close:hidden">Home</span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to={"/dashboard/create-donation-request"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Donor Create Donation Request"
+                      data-tip="Create Donation Request"
                     >
                       {/*icon */}
                       <FaHandHoldingMedical size={20} />
@@ -123,10 +123,11 @@ const DashboardLayout = () => {
                     <NavLink
                       to={"/dashboard"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Admin-Home-Information"
+                      data-tip="Home-Information"
+                      end
                     >
                       <FaHome size={20} />
-                      <span className="is-drawer-close:hidden">Admin Home</span>
+                      <span className="is-drawer-close:hidden">Home</span>
                     </NavLink>
                   </li>
                   <li>
@@ -160,7 +161,8 @@ const DashboardLayout = () => {
                     <NavLink
                       to={"/dashboard"}
                       className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Home (Volunteer )"
+                      data-tip="Home"
+                      end
                     >
                       <FaHome size={20} />
                       <span className="is-drawer-close:hidden">Home</span>

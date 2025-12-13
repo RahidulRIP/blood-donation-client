@@ -23,9 +23,10 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const updateUserProfile = (profileInfo) => {
-    setLoading(true);
-    return updateProfile(auth.currentUser, profileInfo);
+  const [updated, setUpdated] = useState(false);
+  const updateUserProfile = async (profileInfo) => {
+    await updateProfile(auth.currentUser, profileInfo);
+    setUpdated(!updated);
   };
 
   const signInUser = (email, password) => {
@@ -39,7 +40,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const signUserOut = () => {
-    setLoading(true);
     return signOut(auth);
   };
 
@@ -50,14 +50,12 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      // console.log(currentUser);
       setUser(currentUser);
       setLoading(false);
     });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+
+    return () => unsubscribe();
+  }, [updated]);
 
   const authInfo = {
     user,

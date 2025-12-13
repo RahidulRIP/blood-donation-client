@@ -19,9 +19,13 @@ const DashboardRoleBasedPage = () => {
     enabled: !!user?.email,
   });
 
+  
+
   if (!userData?.role) {
     return <Loader />;
   }
+
+  // console.log(userData?.role)
 
   if (userData.role === "donor") return <DonarHome />;
   if (userData.role === "admin") return <AdminHome />;

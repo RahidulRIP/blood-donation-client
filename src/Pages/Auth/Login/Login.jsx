@@ -11,7 +11,6 @@ const Login = () => {
   const { signInUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(location);
 
   const {
     register,
@@ -20,10 +19,8 @@ const Login = () => {
   } = useForm();
 
   const handleLogin = (data) => {
-    console.log(data);
     signInUser(data?.email, data?.password)
-      .then((result) => {
-        console.log(result);
+      .then(() => {
         navigate(location?.state || "/");
       })
       .catch((err) => {
@@ -95,10 +92,7 @@ const Login = () => {
             </div>
             {/* error  */}
             {error && <h2 className="text-red-600">{error}</h2>}
-            <button
-              type="submit"
-              className="btn_primary"
-            >
+            <button type="submit" className="btn_primary">
               Login
             </button>
           </form>
