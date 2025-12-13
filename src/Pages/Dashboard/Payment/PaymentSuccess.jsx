@@ -24,7 +24,7 @@ const PaymentSuccess = () => {
         .then((res) => {
           if (res?.data?.transactionId) {
             setPaymentInformation(res?.data?.transactionId);
-            console.log(res);
+            // console.log(res);
             if (res?.data?.transactionId) {
               Swal.fire({
                 position: "top-end",
