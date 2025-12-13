@@ -299,7 +299,7 @@ const DonarHome = () => {
           </div>
         </div>
       ) : (
-        <h2 className="text-center text-4xl text-warning font-bold">
+        <h2 className="text-center text-3xl md:text-4xl text-warning font-bold">
           No Request Created Yet
         </h2>
       )}
