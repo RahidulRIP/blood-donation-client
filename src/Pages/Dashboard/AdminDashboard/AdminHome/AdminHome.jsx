@@ -43,6 +43,17 @@ const AdminHome = ({ role }) => {
     },
   });
 
+  // working on dynamically change  user name start
+  const { data: userData = {} } = useQuery({
+    queryKey: ["userData", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users?email=${user?.email}`);
+      return res?.data[0];
+    },
+    enabled: !!user?.email,
+  });
+  // working on dynamically change  user name end
+
   return (
     <Container>
       <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
@@ -55,7 +66,7 @@ const AdminHome = ({ role }) => {
             </h2>
             <p className="text-lg text-gray-500 mt-2">
               Welcome,{" "}
-              <span className="font-bold">{user?.displayName || "Admin"}</span>!
+              <span className="font-bold">{userData?.name || "Admin"}</span>!
               Here's a snapshot of your system's performance.
             </p>
           </div>
@@ -72,7 +83,7 @@ const AdminHome = ({ role }) => {
                 {role === "volunteer" ? <>Volunteer</> : <>Admin</>}
               </div>
               <div className="stat-value">
-                {user?.displayName?.split(" ")[0] || "Admin"}
+                {userData?.name?.split(" ")[0] || "Admin"}
               </div>
             </div>
           </div>
