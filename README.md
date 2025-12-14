@@ -8,7 +8,7 @@ BloodLink is a simple and user-friendly platform that connects blood donors with
 # Description
 BloodLink allows donors, volunteers, and admins to manage blood donation information in one place. Users can create requests, update donor profiles, track donation history, and handle all essential data through a clean and responsive interface.
 
-# Key Features1. Frontend
+# Key Features
 1. Donor registration and profile management
 2. Create and manage blood requests
 3. Role-based dashboard (Donor, Volunteer, Admin)
