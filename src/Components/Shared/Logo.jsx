@@ -4,7 +4,7 @@ import logo from "../../assets/logoBlood.png";
 const Logo = () => {
   return (
     <div>
-      <div className="w-52 rounded-sm">
+      <div className="w-36 md:w-52 rounded-sm">
         <img className="rounded-sm" src={logo} alt="" />
       </div>
     </div>

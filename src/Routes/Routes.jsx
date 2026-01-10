@@ -25,6 +25,11 @@ import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancelled";
 import RoutesErrorPage from "./RoutesErrorPage";
 import PrivateRouteAdmin from "./PrivateRouteAdmin";
 import AdminVolunteerPrivate from "./adminVolunteerPrivate";
+import MissionStory from "../Pages/Home/Home/components/MissionStory";
+import NutritionGuide from "../Pages/Home/Home/components/NutritionGuide";
+import RareBloodImpact from "../Pages/Home/Home/components/RareBloodImpact";
+import SavingLives from "../Pages/Home/Home/components/SavingLives";
+import SuccessStories from "../Pages/Home/Home/components/SuccessStories";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +71,26 @@ const router = createBrowserRouter([
             <FundingPage />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "about",
+        element: <MissionStory />,
+      },
+      {
+        path: "blog/nutrition-guide",
+        element: <NutritionGuide />,
+      },
+      {
+        path: "blog/rare-blood-impact",
+        element: <RareBloodImpact />,
+      },
+      {
+        path: "blog/saving-lives",
+        element: <SavingLives />,
+      },
+      {
+        path: "success-stories",
+        element: <SuccessStories />,
       },
     ],
   },

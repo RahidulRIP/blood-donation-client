@@ -4,12 +4,28 @@ import { TfiMenuAlt } from "react-icons/tfi";
 import useAuth from "../../../hooks/useAuth";
 import { Link, NavLink } from "react-router";
 import Logo from "../../../Components/Shared/Logo";
-import { CgProfile } from "react-icons/cg";
+import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, signUserOut } = useAuth();
   const [clickProfile, setClickProfile] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((p) => (p === "light" ? "dark" : "light"));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,8 +103,8 @@ const Navbar = () => {
           </div>
           <div className="navbar-center hidden lg:flex ">
             <ul
-              className={`menu menu-horizontal px-1 font-medium space-x-2.5${
-                isScrolled ? "text-orange-500" : ""
+              className={`menu menu-horizontal px-1 font-semibold space-x-2.5 p-4${
+                isScrolled ? "text-orange-500 p-3.5" : ""
               }`}
             >
               {links}
@@ -96,6 +112,20 @@ const Navbar = () => {
           </div>
 
           <div className="navbar-end gap-6">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className={`btn btn-ghost btn-circle hover:bg-white/10 transition-all ${
+                isScrolled ? "text-orange-400" : "text-white"
+              }`}
+            >
+              {theme === "light" ? (
+                <HiOutlineMoon size={22} />
+              ) : (
+                <HiOutlineSun size={22} className="text-yellow-400" />
+              )}
+            </button>
+
             {user?.email ? (
               ""
             ) : (
@@ -108,7 +138,6 @@ const Navbar = () => {
                 </Link>
               </>
             )}
-
             {user?.email && (
               <div className="relative">
                 <div
