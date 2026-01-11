@@ -49,7 +49,7 @@ const HowItWorks = () => {
     <section className="fixed-spacing  bg-base-200 relative overflow-hidden ">
       <Container>
         {/* Section Header */}
-        <div className="text-center">
+        <div className="text-center pb-8 ">
           <span className="text-red-600 font-black uppercase tracking-[0.3em] text-xs">
             Simple Process
           </span>
