@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FiImage, FiLock, FiMail, FiUser } from "react-icons/fi";
@@ -12,6 +12,14 @@ import useLoadUpazilas from "../../../hooks/useLoadUpazilas";
 import useAxios from "../../../hooks/useAxios";
 
 const Register = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const districts = useLoadDistricts();
   const upazilas = useLoadUpazilas();
   const location = useLocation();

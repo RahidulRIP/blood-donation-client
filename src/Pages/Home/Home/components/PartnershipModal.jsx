@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FaTimes,
-  FaShieldAlt,
-  FaCheckCircle,
-  FaSpinner
-} from "react-icons/fa";
+import { FaTimes, FaShieldAlt, FaCheckCircle, FaSpinner } from "react-icons/fa";
 
 const PartnershipModal = ({ isOpen, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,7 +15,7 @@ const PartnershipModal = ({ isOpen, onClose }) => {
 
     setIsSubmitting(false);
     setShowToast(true);
-    
+
     // Close modal after showing success for a moment
     setTimeout(() => {
       setShowToast(false);
@@ -37,7 +32,7 @@ const PartnershipModal = ({ isOpen, onClose }) => {
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 20, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
-            className="fixed top-0 left-0 right-0 z-[2000] flex justify-center pointer-events-none"
+            className="fixed top-0 left-0 right-0 z-2000 flex justify-center pointer-events-none"
           >
             <div className="bg-slate-900 text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-4 border border-slate-700">
               <FaCheckCircle className="text-emerald-500 text-xl" />
@@ -51,7 +46,7 @@ const PartnershipModal = ({ isOpen, onClose }) => {
 
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-1000 flex items-center justify-center p-4">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle } from "react-icons/fa";
+import {
+  FaPhoneAlt,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaPaperPlane,
+  FaCheckCircle,
+} from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify"; // Import Toastify
 import "react-toastify/dist/ReactToastify.css"; // Essential styles
@@ -23,7 +29,7 @@ const ContactUsSection = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       setShowSuccess(true);
-      
+
       // Update loading toast to success
       toast.update(id, {
         render: "Message Sent Successfully! 🩸",
@@ -37,7 +43,7 @@ const ContactUsSection = () => {
           color: "#fff",
           borderRadius: "15px",
           border: "1px solid #ef4444",
-        }
+        },
       });
 
       e.target.reset();
@@ -48,10 +54,13 @@ const ContactUsSection = () => {
   };
 
   return (
-    <section className="relative py-24 bg-white dark:bg-zinc-950 transition-colors duration-700 overflow-hidden px-3.5 rounded-xl md:rounded-none">
+    <section
+      id="contact-section"
+      className="scroll-mt-24 relative py-24 bg-white dark:bg-zinc-950 transition-colors duration-700 overflow-hidden px-3.5 rounded-xl md:rounded-none"
+    >
       {/* Toastify Container - Needs to be present once in your layout */}
       <ToastContainer limit={3} />
-      
+
       {/* Background Decorative Mesh */}
       <div className="absolute top-1/4 -right-20 w-96 h-96 bg-red-500/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 -left-20 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
@@ -73,11 +82,10 @@ const ContactUsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch relative">
-          
           {/* Success Overlay with Framer Motion */}
           <AnimatePresence>
             {showSuccess && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -91,9 +99,13 @@ const ContactUsSection = () => {
                   >
                     <FaCheckCircle size={48} />
                   </motion.div>
-                  <h3 className="text-4xl font-black dark:text-white tracking-tighter uppercase">Lifesaver Confirmed!</h3>
-                  <p className="text-slate-500 dark:text-zinc-400 mt-3 font-medium">Your request has been beamed to our coordinators.</p>
-                  <button 
+                  <h3 className="text-4xl font-black dark:text-white tracking-tighter uppercase">
+                    Lifesaver Confirmed!
+                  </h3>
+                  <p className="text-slate-500 dark:text-zinc-400 mt-3 font-medium">
+                    Your request has been beamed to our coordinators.
+                  </p>
+                  <button
                     onClick={() => setShowSuccess(false)}
                     className="mt-8 px-8 py-3 bg-slate-900 dark:bg-white dark:text-black text-white rounded-full font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform"
                   >
@@ -113,23 +125,51 @@ const ContactUsSection = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">Full Name</label>
-                  <input required type="text" placeholder="John Doe" className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white" />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">
+                    Full Name
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="John Doe"
+                    className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">Email</label>
-                  <input required type="email" placeholder="john@example.com" className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white" />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">
+                    Email
+                  </label>
+                  <input
+                    required
+                    type="email"
+                    placeholder="john@example.com"
+                    className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white"
+                  />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">Subject</label>
-                <input required type="text" placeholder="General Inquiry" className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white" />
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">
+                  Subject
+                </label>
+                <input
+                  required
+                  type="text"
+                  placeholder="General Inquiry"
+                  className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white"
+                />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">Your Message</label>
-                <textarea required rows="4" placeholder="How can we help you today?" className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white resize-none" />
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500 ml-2">
+                  Your Message
+                </label>
+                <textarea
+                  required
+                  rows="4"
+                  placeholder="How can we help you today?"
+                  className="w-full px-6 py-4 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all dark:text-white resize-none"
+                />
               </div>
 
               <button
@@ -138,7 +178,13 @@ const ContactUsSection = () => {
                 className="group w-full py-5 bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-red-500/20 flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50"
               >
                 {isSubmitting ? "TRANSMITTING..." : "Send Message"}
-                <FaPaperPlane className={`${isSubmitting ? 'animate-bounce' : 'group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform'}`} />
+                <FaPaperPlane
+                  className={`${
+                    isSubmitting
+                      ? "animate-bounce"
+                      : "group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                  }`}
+                />
               </button>
             </form>
           </motion.div>
@@ -151,27 +197,55 @@ const ContactUsSection = () => {
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
             <div className="relative z-10 flex flex-col h-full">
-              <h3 className="text-3xl font-black uppercase tracking-tighter mb-12">Contact <br /> Headquarters</h3>
+              <h3 className="text-3xl font-black uppercase tracking-tighter mb-12">
+                Contact <br /> Headquarters
+              </h3>
               <div className="space-y-12">
                 <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/30"><FaPhoneAlt size={22} /></div>
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/30">
+                    <FaPhoneAlt size={22} />
+                  </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">Direct Line</p>
-                    <a href="tel:+1234567890" className="text-xl font-bold hover:underline tracking-tight">+1 (234) 567-890</a>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">
+                      Direct Line
+                    </p>
+                    <a
+                      href="tel:+1234567890"
+                      className="text-xl font-bold hover:underline tracking-tight"
+                    >
+                      +1 (234) 567-890
+                    </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/30"><FaEnvelope size={22} /></div>
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/30">
+                    <FaEnvelope size={22} />
+                  </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">Electronic Mail</p>
-                    <a href="mailto:support@bloodlink.com" className="text-xl font-bold hover:underline tracking-tight">hello@bloodlink.com</a>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">
+                      Electronic Mail
+                    </p>
+                    <a
+                      href="mailto:support@bloodlink.com"
+                      className="text-xl font-bold hover:underline tracking-tight"
+                    >
+                      hello@bloodlink.com
+                    </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/30"><FaMapMarkerAlt size={22} /></div>
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/30">
+                    <FaMapMarkerAlt size={22} />
+                  </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">HQ Location</p>
-                    <p className="text-xl font-bold tracking-tight leading-tight">123 Donor Avenue,<br />Blood City, TX 77001</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">
+                      HQ Location
+                    </p>
+                    <p className="text-xl font-bold tracking-tight leading-tight">
+                      123 Donor Avenue,
+                      <br />
+                      Blood City, TX 77001
+                    </p>
                   </div>
                 </div>
               </div>

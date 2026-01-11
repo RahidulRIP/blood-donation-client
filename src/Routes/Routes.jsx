@@ -30,6 +30,10 @@ import NutritionGuide from "../Pages/Home/Home/components/NutritionGuide";
 import RareBloodImpact from "../Pages/Home/Home/components/RareBloodImpact";
 import SavingLives from "../Pages/Home/Home/components/SavingLives";
 import SuccessStories from "../Pages/Home/Home/components/SuccessStories";
+import AboutUs from "../Pages/Shared/Footer/Components/AboutUs";
+import TermsOfUse from "../Pages/Shared/Footer/Components/TermsOfUse";
+import PrivacyPolicy from "../Pages/Shared/Footer/Components/PrivacyPolicy";
+import CookiePolicy from "../Pages/Shared/Footer/Components/CookiePolicy";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +96,22 @@ const router = createBrowserRouter([
         path: "success-stories",
         element: <SuccessStories />,
       },
+      {
+        path: "about-us",
+        Component: AboutUs,
+      },
+      {
+        path: "terms-use",
+        Component: TermsOfUse,
+      },
+      {
+        path: "privacy-policy",
+        Component: PrivacyPolicy,
+      },
+      {
+        path: "cookie-policy",
+        Component: CookiePolicy
+      },
     ],
   },
   {
@@ -115,7 +135,11 @@ const router = createBrowserRouter([
       },
       {
         path: "create-donation-request",
-        Component: CreateDonationRequest,
+        element: (
+          <PrivateRoute>
+            <CreateDonationRequest />
+          </PrivateRoute>
+        ),
       },
       {
         path: "updateDonarReqData/:id",

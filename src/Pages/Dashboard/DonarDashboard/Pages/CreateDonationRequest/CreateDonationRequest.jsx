@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import { useForm, useWatch } from "react-hook-form";
 import { FiMail, FiUser } from "react-icons/fi";
@@ -18,6 +18,13 @@ import { MdOutlineNotificationImportant } from "react-icons/md";
 import { useNavigate } from "react-router";
 
 const CreateDonationRequest = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const districts = useLoadDistricts();
   const upazilas = useLoadUpazilas();
   const navigate = useNavigate();
