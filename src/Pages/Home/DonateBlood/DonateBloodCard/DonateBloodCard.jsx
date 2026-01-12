@@ -92,7 +92,7 @@ const DonateBloodCard = ({ detailsData, refetch, isLoading }) => {
       className="relative group"
     >
       {/* OUTER GLOW EFFECT */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-red-600 to-slate-900 rounded-[3rem] blur opacity-10 group-hover:opacity-30 transition duration-1000"></div>
+      <div className="absolute -inset-0.5 bg-linear-to-r from-red-600 to-slate-900 rounded-[3rem] blur opacity-10 group-hover:opacity-30 transition duration-1000"></div>
 
       <div className="relative bg-white rounded-[3rem] border border-slate-100 overflow-hidden shadow-2xl flex flex-col xl:flex-row">
         
@@ -146,7 +146,7 @@ const DonateBloodCard = ({ detailsData, refetch, isLoading }) => {
         </div>
 
         {/* RIGHT: THE "HUD" CONTENT */}
-        <div className="flex-1 p-10 bg-gradient-to-br from-white to-slate-50 flex flex-col">
+        <div className="flex-1 p-10 bg-linear-to-br from-white to-slate-50 flex flex-col">
           <div className="flex justify-between items-start mb-8">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -264,7 +264,7 @@ const DonateBloodCard = ({ detailsData, refetch, isLoading }) => {
                 />
                 {donation_status === "pending" ? "Authorize Donation" : "Link Inactive"}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
             </button>
           </div>
         </div>
@@ -273,7 +273,7 @@ const DonateBloodCard = ({ detailsData, refetch, isLoading }) => {
       {/* MODAL: GLASS TERMINAL */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-1000 flex items-center justify-center p-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -334,282 +334,3 @@ const DonateBloodCard = ({ detailsData, refetch, isLoading }) => {
 };
 
 export default DonateBloodCard;
-
-// import {
-//   FaHospital,
-//   FaCalendarAlt,
-//   FaClock,
-//   FaMapMarkerAlt,
-//   FaEnvelope,
-//   FaTint,
-//   FaCommentDots,
-// } from "react-icons/fa";
-// import Container from "../../../../Components/Container/Container";
-// import useAxiosSecure from "../../../../hooks/useAxiosSecure";
-// import { toast } from "react-toastify";
-// import useAuth from "../../../../hooks/useAuth";
-// import { useState } from "react";
-
-// const DonateBloodCard = ({ detailsData, refetch, isLoading }) => {
-//   const [isModalOpen, setIsModalOpen] = useState();
-//   const { user } = useAuth();
-//   const {
-//     donation_date,
-//     donation_status,
-//     donation_time,
-//     hospital_name,
-//     recipient_blood_group,
-//     recipient_district,
-//     recipient_full_address,
-//     recipient_name,
-//     recipient_upazila,
-//     request_message,
-//     user_email,
-//     user_name,
-//     _id,
-//   } = detailsData;
-
-//   const axiosSecure = useAxiosSecure();
-
-//   const handleChangeStatus = async (id) => {
-//     setIsModalOpen(false);
-
-//     const bloodDonorInfo = {
-//       bloodDonorName: user?.displayName,
-//       bloodDonorEmail: user?.email,
-//     };
-
-//     try {
-//       const res = await axiosSecure.patch(
-//         `/update-donation-status/${id}`,
-//         bloodDonorInfo
-//       );
-//       if (res.data.modifiedCount > 0) {
-//         refetch();
-//         toast.success(`Donation Status Successfully Updated`);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-
-//   const handleDonateBloodButton = () => {
-//     if (user?.email === user_email) {
-//       return toast.error(
-//         "You cannot perform actions on a request you created."
-//       );
-//     } else {
-//       setIsModalOpen(true);
-//     }
-//   };
-
-//   if (isLoading) {
-//     return <Loader />;
-//   }
-//   return (
-//     <Container>
-//       <div className="bg-base-200">
-//         <div className="max-w-4xl mx-auto">
-//           <div className="card lg:card-side bg-base-100 shadow-xl overflow-hidden border-l-8 border-primary">
-//             {/* Blood Group Left Section */}
-//             <div className="bg-gray-400 flex flex-col items-center justify-center text-primary-content p-8 min-w-[230px]">
-//               <FaTint className="text-6xl mb-2 animate-pulse text-red-600" />
-//               <h1 className="text-5xl font-extrabold">
-//                 {recipient_blood_group}
-//               </h1>
-//               <p className="mt-2 font-medium uppercase tracking-widest">
-//                 Required
-//               </p>
-//               <div
-//                 className={`mt-4 badge ${
-//                   donation_status === "pending"
-//                     ? "badge-warning"
-//                     : "badge-success"
-//                 } badge-lg`}
-//               >
-//                 <h2 className="flex items-center">
-//                   <span className="font-bold text-lg">Status : </span>{" "}
-//                   <span
-//                     className={`font-medium ml-1 ${
-//                       (donation_status === "cancel" && "text-red-500") ||
-//                       (donation_status === "inprogress" && "text-white") ||
-//                       (donation_status === "done" && "text-[#8B5CF6]")
-//                     }`}
-//                   >
-//                     {donation_status}
-//                   </span>
-//                 </h2>
-//               </div>
-//             </div>
-
-//             {/* Details Section */}
-//             <div className="card-body">
-//               <div className="flex justify-between items-start">
-//                 <div>
-//                   <h2 className="card-title text-3xl font-bold text-gray-800">
-//                     {recipient_name}
-//                   </h2>
-//                   <p className="text-sm text-gray-500 italic">
-//                     Requested by: {user_name}
-//                   </p>
-//                 </div>
-//               </div>
-
-//               <div className="divider my-2"></div>
-
-//               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-//                 {/* hospital_name  */}
-//                 <div className="flex items-start gap-3">
-//                   <FaHospital className="mt-1 text-primary" />
-//                   <div>
-//                     <p className="font-semibold">Hospital</p>
-//                     <p className="text-gray-600">{hospital_name}</p>
-//                   </div>
-//                 </div>
-
-//                 {/* address and location  */}
-//                 <div className="flex items-start gap-3 overflow-y-auto h-20">
-//                   <FaMapMarkerAlt className="mt-1 text-primary" />
-//                   <div>
-//                     <p className="font-semibold">Location</p>
-//                     <p className="text-gray-600">
-//                       {recipient_upazila}, {recipient_district}
-//                     </p>
-//                     <p className="text-xs text-gray-500 leading-tight">
-//                       {recipient_full_address}
-//                     </p>
-//                   </div>
-//                 </div>
-
-//                 {/* Donation Date  */}
-//                 <div className="flex items-start gap-3 ">
-//                   <FaCalendarAlt className="mt-1 text-primary" />
-//                   <div>
-//                     <p className="font-semibold">Donation Date</p>
-//                     <p className="text-gray-600">{donation_date}</p>
-//                   </div>
-//                 </div>
-
-//                 {/* donation_time  */}
-//                 <div className="flex items-start gap-3">
-//                   <FaClock className="mt-1 text-primary" />
-//                   <div>
-//                     <p className="font-semibold">Time</p>
-//                     <p className="text-gray-600">{donation_time}</p>
-//                   </div>
-//                 </div>
-
-//                 {/* Requester Contact  */}
-//                 <div className="flex items-start gap-3">
-//                   <FaEnvelope className="mt-1 text-primary" />
-//                   <div>
-//                     <p className="font-semibold">Requester Contact</p>
-//                     <p className="text-gray-600">{user_email}</p>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-dashed border-primary h-32 overflow-y-auto">
-//                 <p className="flex items-center gap-2 font-semibold text-primary mb-1">
-//                   <FaCommentDots /> Message:
-//                 </p>
-
-//                 <p className="text-gray-700 italic">"{request_message}"</p>
-//               </div>
-
-//               {donation_status === "pending" ? (
-//                 <button
-//                   onClick={handleDonateBloodButton}
-//                   className="btn btn_primary text-black cursor-not-allowed"
-//                 >
-//                   DONATE BlOOD
-//                 </button>
-//               ) : (
-//                 <button className="btn  text-black text-lg cursor-not-allowed">
-//                   DONATE BlOOD
-//                 </button>
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//       {/* modal  */}
-//       <section>
-//         {isModalOpen && (
-//           <div className="modal modal-open">
-//             <div className="modal-box">
-//               <h3 className="font-bold text-2xl text-primary mb-4">
-//                 Make a Donation
-//               </h3>
-//               <p className="text-sm text-gray-500 mb-6">
-//                 Your generosity helps us save lives. Payments are processed
-//                 securely.
-//               </p>
-
-//               <form>
-//                 {/* Donor Name */}
-//                 <div className="form-control w-full mb-4">
-//                   <label className="label">
-//                     <span className="label-text font-semibold">Your Name</span>
-//                   </label>
-//                   <input
-//                     type="text"
-//                     defaultValue={user?.displayName}
-//                     className="input input-bordered w-full"
-//                     readOnly
-//                   />
-//                 </div>
-
-//                 {/* Donor Email */}
-//                 <div className="form-control w-full mb-6">
-//                   <label className="label">
-//                     <span className="label-text font-semibold">Your Email</span>
-//                   </label>
-//                   <input
-//                     type="email"
-//                     defaultValue={user?.email}
-//                     className="input input-bordered w-full"
-//                     readOnly
-//                   />
-//                 </div>
-
-//                 {/* Action Buttons */}
-//                 <div className="modal-action mt-4">
-//                   {/* <button onClick={()=>handleChangeStatus(_id,)} type="submit" className="btn btn-primary text-black">
-//                     Confirm Donation
-//                   </button> */}
-//                   <button
-//                     onClick={() => handleChangeStatus(_id)}
-//                     type="button"
-//                     className="btn btn-primary text-black hover:text-white hover:bg-red-400"
-//                     disabled={
-//                       donation_status === "inprogress" ||
-//                       donation_status === "done" ||
-//                       (donation_status === "cancel" && true)
-//                     }
-//                   >
-//                     Confirm Donation
-//                   </button>
-//                   <button
-//                     type="button"
-//                     className="btn btn-ghost"
-//                     onClick={() => setIsModalOpen(false)}
-//                   >
-//                     Cancel
-//                   </button>
-//                 </div>
-//               </form>
-//             </div>
-
-//             <div
-//               className="modal-backdrop"
-//               onClick={() => setIsModalOpen(false)}
-//             ></div>
-//           </div>
-//         )}
-//       </section>
-//     </Container>
-//   );
-// };
-
-// export default DonateBloodCard;

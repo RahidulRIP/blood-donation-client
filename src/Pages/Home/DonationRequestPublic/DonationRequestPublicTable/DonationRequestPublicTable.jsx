@@ -5,10 +5,13 @@ import {
   FaClock,
   FaChevronRight,
   FaDatabase,
+  FaSearch,
+  FaFilter,
+  FaSortAmountDown,
 } from "react-icons/fa";
 import { Link } from "react-router";
 import useAuth from "../../../../hooks/useAuth";
-import { useState } from "react";
+import { useState, useMemo } from "react"; // Added useMemo
 import Container from "../../../../Components/Container/Container";
 import Loader from "../../../../Components/Shared/Loader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,15 +22,49 @@ const DonationRequestPublicTable = ({
 }) => {
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // --- New State for Search, Filter, Sort ---
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterBloodGroup, setFilterBloodGroup] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest"); // newest, oldest
+
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(donationReqPendingData.length / itemsPerPage);
+
+  // --- Logic: Search, Filter, and Sort ---
+  const filteredAndSortedData = useMemo(() => {
+    let result = [...donationReqPendingData];
+
+    // 1. Search Logic (by Recipient Name or Upazila)
+    if (searchTerm) {
+      result = result.filter(
+        (item) =>
+          item.recipient_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.recipient_upazila.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // 2. Filter Logic (by Blood Group)
+    if (filterBloodGroup) {
+      result = result.filter((item) => item.recipient_blood_group === filterBloodGroup);
+    }
+
+    // 3. Sort Logic (by Date)
+    result.sort((a, b) => {
+      const dateA = new Date(a.donation_date);
+      const dateB = new Date(b.donation_date);
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+
+    return result;
+  }, [donationReqPendingData, searchTerm, filterBloodGroup, sortOrder]);
+
+  const totalPages = Math.ceil(filteredAndSortedData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = donationReqPendingData.slice(
+  const paginatedData = filteredAndSortedData.slice(
     startIndex,
     startIndex + itemsPerPage
   );
 
-  // Adjusted Loader with a centered, full-height container
   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
@@ -41,7 +78,7 @@ const DonationRequestPublicTable = ({
 
   return (
     <Container>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -60,12 +97,59 @@ const DonationRequestPublicTable = ({
                 Real-time Network Monitor
               </span>
             </div>
-            <h2 className="text-4xl font-black text-slate-950 uppercase tracking-tighter">
+            <h2 className="text-4xl font-black uppercase tracking-tighter">
               Pending <span className="text-red-600 italic">Transfusions</span>
             </h2>
           </motion.div>
 
+          {/* SEARCH & FILTER CONTROLS */}
           <motion.div 
+             initial={{ y: 10, opacity: 0 }}
+             animate={{ y: 0, opacity: 1 }}
+             className="flex flex-wrap items-center gap-4 bg-white text-gray-500 p-3 rounded-4xl shadow-xl border border-slate-100"
+          >
+            {/* Search Input */}
+            <div className="relative">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
+              <input 
+                type="text" 
+                placeholder="SEARCH RECIPIENT..."
+                className="pl-10 pr-4 py-2 bg-slate-50 border-none rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-red-600 w-48 transition-all"
+                value={searchTerm}
+                onChange={(e) => {setSearchTerm(e.target.value); setCurrentPage(1);}}
+              />
+            </div>
+
+            {/* Blood Group Filter */}
+            <div className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-2xl border border-slate-100">
+              <FaFilter className="text-slate-400 text-[10px]" />
+              <select 
+                className="bg-transparent border-none text-[10px] font-black uppercase tracking-widest focus:ring-0 cursor-pointer"
+                value={filterBloodGroup}
+                onChange={(e) => {setFilterBloodGroup(e.target.value); setCurrentPage(1);}}
+              >
+                <option value="">ALL GROUPS</option>
+                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(group => (
+                  <option key={group} value={group}>{group}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort Control */}
+            <div className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-2xl border border-slate-100">
+              <FaSortAmountDown className="text-slate-400 text-[10px]" />
+              <select 
+                className="bg-transparent border-none text-[10px] font-black uppercase tracking-widest focus:ring-0 cursor-pointer"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+              >
+                <option value="newest">NEWEST FIRST</option>
+                <option value="oldest">OLDEST FIRST</option>
+              </select>
+            </div>
+          </motion.div>
+
+          <motion.div
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -73,10 +157,10 @@ const DonationRequestPublicTable = ({
           >
             <div className="text-right">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
-                Total Requests
+                Filtered Result
               </p>
               <p className="text-2xl font-black text-slate-950">
-                {donationReqPendingData.length}
+                {filteredAndSortedData.length}
               </p>
             </div>
             <div className="h-10 w-px bg-slate-200" />
@@ -92,7 +176,7 @@ const DonationRequestPublicTable = ({
         </div>
 
         {/* ENTERPRISE GRADE TABLE */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -102,28 +186,43 @@ const DonationRequestPublicTable = ({
             <table className="table w-full border-collapse">
               <thead>
                 <tr className="bg-slate-950 border-none text-left">
-                  <th className="py-7 pl-10 text-white font-black uppercase tracking-[0.2em] text-[10px]">ID</th>
-                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">Recipient Profile</th>
-                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">Logistics Hub</th>
-                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">Scheduled Time</th>
-                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px] text-center">Group</th>
-                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">Status</th>
-                  <th className="py-7 pr-10 text-white font-black uppercase tracking-[0.2em] text-[10px] text-right">Actions</th>
+                  <th className="py-7 pl-10 text-white font-black uppercase tracking-[0.2em] text-[10px]">
+                    ID
+                  </th>
+                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">
+                    Recipient Profile
+                  </th>
+                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">
+                    Logistics Hub
+                  </th>
+                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">
+                    Scheduled Time
+                  </th>
+                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px] text-center">
+                    Group
+                  </th>
+                  <th className="py-7 text-white font-black uppercase tracking-[0.2em] text-[10px]">
+                    Status
+                  </th>
+                  <th className="py-7 pr-10 text-white font-black uppercase tracking-[0.2em] text-[10px] text-right">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-slate-50">
                 <AnimatePresence mode="popLayout">
                   {paginatedData.length === 0 ? (
-                    <motion.tr 
-                      initial={{ opacity: 0 }} 
-                      animate={{ opacity: 1 }} 
+                    <motion.tr
+                      key="no-data"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
                       <td colSpan="7" className="py-24 text-center">
                         <FaDatabase className="mx-auto text-slate-100 text-5xl mb-4" />
                         <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">
-                          No encrypted data packets found
+                          No encrypted data packets found matching criteria
                         </p>
                       </td>
                     </motion.tr>
@@ -133,7 +232,8 @@ const DonationRequestPublicTable = ({
                         key={data._id}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 + 0.5 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ delay: index * 0.05 }}
                         className="group hover:bg-slate-50/50 transition-all duration-300"
                       >
                         <td className="py-7 pl-10">
@@ -222,7 +322,7 @@ const DonationRequestPublicTable = ({
 
         {/* PAGINATION CONTROL */}
         {totalPages > 1 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
@@ -233,7 +333,7 @@ const DonationRequestPublicTable = ({
                 disabled={currentPage === 1}
                 onClick={() => {
                   setCurrentPage(currentPage - 1);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 className="w-12 h-12 flex items-center justify-center rounded-2xl text-slate-950 hover:bg-slate-50 disabled:opacity-20 transition-all"
               >
@@ -246,7 +346,7 @@ const DonationRequestPublicTable = ({
                     key={page}
                     onClick={() => {
                       setCurrentPage(page + 1);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     className={`w-10 h-10 rounded-2xl font-black text-[10px] transition-all ${
                       currentPage === page + 1
@@ -263,7 +363,7 @@ const DonationRequestPublicTable = ({
                 disabled={currentPage === totalPages}
                 onClick={() => {
                   setCurrentPage(currentPage + 1);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 className="w-12 h-12 flex items-center justify-center rounded-2xl text-slate-950 hover:bg-slate-50 disabled:opacity-20 transition-all"
               >
@@ -278,192 +378,3 @@ const DonationRequestPublicTable = ({
 };
 
 export default DonationRequestPublicTable;
-
-// import { FaMapMarkerAlt, FaTint } from "react-icons/fa";
-// import { Link } from "react-router";
-// import useAuth from "../../../../hooks/useAuth";
-// import { useState } from "react";
-// import Container from "../../../../Components/Container/Container";
-
-// const DonationRequestPublicTable = ({ donationReqPendingData = [] }) => {
-//   const { user } = useAuth();
-
-//   // Pagination settings
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const itemsPerPage = 6;
-
-//   const totalPages = Math.ceil(donationReqPendingData.length / itemsPerPage);
-
-//   const startIndex = (currentPage - 1) * itemsPerPage;
-//   const paginatedData = donationReqPendingData.slice(
-//     startIndex,
-//     startIndex + itemsPerPage
-//   );
-
-//   return (
-//     <Container>
-//       <div className="py-6 md:py-20">
-//         {/* Top Section */}
-//         <div className="md:flex items-center justify-between gap-5 md:mx-6 mb-6">
-//           <div className="mb-8 md:flex flex-col md:flex-row justify-between items-center gap-10 bg-white p-6 rounded-xl shadow-sm border-l-8 border-red-500 w-full">
-//             <div>
-//               <h2 className="text-2xl md:text-3xl text-gray-800">
-//                 Welcome,{" "}
-//                 <span className="font-bold text-red-600">
-//                   {user?.displayName || "User"}
-//                 </span>
-//                 !
-//               </h2>
-
-//               <p className="text-gray-500 mt-1 flex items-center gap-2">
-//                 <FaTint className="text-red-500" />
-//                 Your Donation, Their Hope
-//               </p>
-//             </div>
-
-//             <div className="mt-4 md:mt-0">
-//               <div className="stats shadow">
-//                 <div className="stat place-items-center">
-//                   <div className="stat-title">Total Pending Requests</div>
-//                   <div className="stat-value text-red-500">
-//                     {donationReqPendingData.length}
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Table Section */}
-//         <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-//           <div className="overflow-x-auto">
-//             <table className="table w-full">
-//               <thead className="bg-gray-100 text-gray-600 uppercase text-xs font-bold tracking-wider">
-//                 <tr>
-//                   <th className="py-4 pl-6">#</th>
-//                   <th>Recipient Name</th>
-//                   <th>Location</th>
-//                   <th>Donation Date & Time</th>
-//                   <th>Blood Group</th>
-//                   <th>Status</th>
-//                   <th className="text-center">Actions</th>
-//                 </tr>
-//               </thead>
-
-//               <tbody className="divide-y divide-gray-200">
-//                 {paginatedData.length === 0 && (
-//                   <tr>
-//                     <td colSpan="7" className="text-center py-6 text-gray-500">
-//                       No pending donation requests found.
-//                     </td>
-//                   </tr>
-//                 )}
-
-//                 {paginatedData.map((data, index) => (
-//                   <tr
-//                     key={data._id}
-//                     className="hover:bg-red-50 transition-colors duration-200"
-//                   >
-//                     <th className="pl-6 text-gray-400">
-//                       {startIndex + index + 1}
-//                     </th>
-
-//                     <td className="font-bold text-gray-800">
-//                       {data.recipient_name}
-//                     </td>
-
-//                     <td>
-//                       <div className="flex items-center gap-1 text-sm text-gray-600">
-//                         <FaMapMarkerAlt className="text-gray-400" />
-//                         {data.recipient_upazila}, {data.recipient_district}
-//                       </div>
-//                     </td>
-
-//                     <td>
-//                       <div className="text-sm">
-//                         <div className="font-medium text-gray-800">
-//                           {data.donation_date}
-//                         </div>
-//                         <div className="text-xs text-gray-500">
-//                           {data.donation_time}
-//                         </div>
-//                       </div>
-//                     </td>
-
-//                     <td>
-//                       <div className="badge badge-error badge-outline font-bold">
-//                         {data.recipient_blood_group}
-//                       </div>
-//                     </td>
-
-//                     <td>
-//                       <div
-//                         className={`badge font-medium ${
-//                           data.donation_status === "inprogress"
-//                             ? "badge-warning"
-//                             : data.donation_status === "done"
-//                             ? "badge-success text-white"
-//                             : "badge-ghost"
-//                         }`}
-//                       >
-//                         {data.donation_status}
-//                       </div>
-//                     </td>
-
-//                     <td>
-//                       <div className="flex justify-center">
-//                         <Link
-//                           to={`/dashboard/detailsDonarReqData/${data._id}`}
-//                           className="btn btn-primary text-black font-medium  btn-sm"
-//                         >
-//                           Show Details
-//                         </Link>
-//                       </div>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-
-//         {/* Pagination */}
-//         {totalPages > 1 && (
-//           <div className="flex justify-center mt-5">
-//             <div className="join">
-//               <button
-//                 className="join-item btn"
-//                 disabled={currentPage === 1}
-//                 onClick={() => setCurrentPage(currentPage - 1)}
-//               >
-//                 Prev
-//               </button>
-
-//               {[...Array(totalPages).keys()].map((page) => (
-//                 <button
-//                   key={page}
-//                   onClick={() => setCurrentPage(page + 1)}
-//                   className={`join-item btn ${
-//                     currentPage === page + 1 ? "btn-active" : ""
-//                   }`}
-//                 >
-//                   {page + 1}
-//                 </button>
-//               ))}
-
-//               <button
-//                 className="join-item btn"
-//                 disabled={currentPage === totalPages}
-//                 onClick={() => setCurrentPage(currentPage + 1)}
-//               >
-//                 Next
-//               </button>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-//     </Container>
-//   );
-// };
-
-// export default DonationRequestPublicTable;

@@ -34,6 +34,7 @@ import AboutUs from "../Pages/Shared/Footer/Components/AboutUs";
 import TermsOfUse from "../Pages/Shared/Footer/Components/TermsOfUse";
 import PrivacyPolicy from "../Pages/Shared/Footer/Components/PrivacyPolicy";
 import CookiePolicy from "../Pages/Shared/Footer/Components/CookiePolicy";
+import ResetPassword from "../Pages/Auth/Login/Components/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -110,7 +111,11 @@ const router = createBrowserRouter([
       },
       {
         path: "cookie-policy",
-        Component: CookiePolicy
+        Component: CookiePolicy,
+      },
+      {
+        path: "resetPassword",
+        Component: ResetPassword,
       },
     ],
   },
@@ -131,7 +136,11 @@ const router = createBrowserRouter([
       {
         path: "profile",
         index: true,
-        Component: MyProfile,
+        element: (
+          <PrivateRoute>
+            <MyProfile />
+          </PrivateRoute>
+        ),
       },
       {
         path: "create-donation-request",

@@ -48,6 +48,11 @@ const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   };
 
+  const resetPassword = (email) => {
+    setLoading(true);
+    return sendPasswordResetEmail(auth, email);
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -69,6 +74,7 @@ const AuthProvider = ({ children }) => {
     signUserOut,
     googleSignIn,
     forgetLoginPassword,
+    resetPassword,
   };
 
   return <AuthContext value={authInfo}>{children}</AuthContext>;
